@@ -39,6 +39,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "SpeedLaunch\bin\Release\SpeedLaunch.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "SpeedLaunch\bin\Release\NCalc.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "SpeedLaunch.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

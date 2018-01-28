@@ -1,192 +1,79 @@
-﻿using System;
+﻿using SpeedLaunch.Properties;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Windows.Input;
-using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Windows.Input;
 
 namespace SpeedLaunch
 {
-    public partial class SpeedLaunch : Form
+    public class SpeedLaunch : ApplicationContext
     {
+        public static SpeedLaunchView view = null;
 
-        public int mx = 0;
-        public int my = 0;
+        private NotifyIcon trayIcon;
+       
+        public List<Command> commands = new List<Command>();
+        public List<Index> cache = new List<Index>();
 
-        List<ListItem> items = new List<ListItem>();
-        List<Command> commands = new List<Command>();
-        List<Index> cache = new List<Index>();
-
-        
-
-// EVENTS
-//-----------------------------------------------------------------------------
         public SpeedLaunch()
         {
-
-            InitializeComponent();
-
-            if (!Program.isDebugMode) {
-                this.Hide();
-            }
-
-
             _hookID = SetHook(_proc);
-        }
-
-        private void SpeedLaunch_Load(object sender, EventArgs e)
-        {
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.WindowState = FormWindowState.Maximized;
-            this.ShowInTaskbar = false;
-            this.KeyPreview = true;
 
             loadConfigurationFile();
             buildIndex();
-        }
 
-        private void SpeedLaunch_Activated(object sender, EventArgs e)
-        {
-            inputBox.Focus();
-        }
-
-        private void SpeedLaunch_Shown(object sender, EventArgs e)
-        {
-            inputBox.Focus();
-        }
-
-        private void SpeedLaunch_Resize(object sender, EventArgs e)
-        {
-            inputBox.Width = (int)(this.Width * 0.5);
-
-            inputBox.Left = (this.Width - inputBox.Width) / 2;
-
-
-        }
-
-        private void SpeedLaunch_Paint(object sender, PaintEventArgs e)
-        {
-
-            Font textFont = new System.Drawing.Font("Arial", 16);
-            Font descriptionFont = new System.Drawing.Font("Arial", 8);
-            Pen blackPen = new Pen(Color.Black, 1);
-            SolidBrush itemBrush = new SolidBrush(Color.DarkGray);
-            SolidBrush itemSelectedBrush = new SolidBrush(Color.Gray);
-            SolidBrush iconBrush = new SolidBrush(Color.LightGreen);
-
-            foreach (ListItem item in items)
+            trayIcon = new NotifyIcon()
             {
+                Icon = Resources.SpeedLaunch,
+                ContextMenu = new ContextMenu(new MenuItem[] {
+                    new MenuItem("Exit", Exit)                
+                }),
+                Visible = true,                
+            };
 
-                int il = item.left;
-                int it = item.top;
-                int iw = item.width;
-                int ih = item.heighth;
+            trayIcon.MouseDoubleClick += new MouseEventHandler(this.notifyIcon_Click);
 
-                Rectangle itemrec = new Rectangle(il, it, iw, ih);
-
-                e.Graphics.FillRectangle(itemBrush, itemrec);
-
-                if (item.selected)
-                {
-                    e.Graphics.FillRectangle(itemSelectedBrush, itemrec);
-                }
-
-                
-                if (item.index.image != null)
-                {
-                    e.Graphics.DrawImage(item.index.image, new Rectangle(il + 10, it + 10, 50, 50));
-                }
-                else {
-                    e.Graphics.FillRectangle(iconBrush, new Rectangle(il + 10, it + 10, 50, 50));
-                }
-
-
-                e.Graphics.DrawString(item.text, textFont, Brushes.Black, il + 70, it + 10);
-                e.Graphics.DrawString(item.description, descriptionFont, Brushes.Black, il + 70, it + 30);
-            }
-
-
+            view = new SpeedLaunchView(this);
         }
 
-        private void SpeedLaunch_MouseMove(object sender, MouseEventArgs e)
+        public void Close()
         {
-            mx = e.X;
-            my = e.Y;
-
-            foreach (ListItem item in items)
-            {
-
-                if (item.left <= mx && mx <= item.left + item.width && item.top <= my && my <= item.top + item.heighth)
-                {
-                    selectItem(item);
-                    Invalidate();
-                    return;
-                }
-            }
-        }
-
-        private void SpeedLaunch_MouseClick(object sender, MouseEventArgs e)
-        {
-            mx = e.X;
-            my = e.Y;
-
-            foreach (ListItem item in items)
-            {
-
-                if (item.left <= mx && mx <= item.left + item.width && item.top <= my && my <= item.top + item.heighth)
-                {
-                    selectItem(item);
-                    doItem(item);
-                    return;
-                }
-            }
-        }
-
-        private void SpeedLaunch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.F5)
-            {
-                buildIndex();
-            }
-        }
-
-        private void SpeedLaunch_FormClosed(object sender, FormClosedEventArgs e)
-        {
+            view = null;
             UnhookWindowsHookEx(_hookID);
+            Application.Exit();            
         }
+        
+        // CONFIGURATION
+        //-----------------------------------------------------------------------------
 
-// CONFIGURATION
-//-----------------------------------------------------------------------------
         public void loadConfigurationFile()
         {
-            string confidDirectory =  Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string confidDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
             string speedlaunchConfigDirectory = Path.Combine(confidDirectory, "SpeedLaunch");
 
-            if (!Directory.Exists(confidDirectory))
+            if (!Directory.Exists(speedlaunchConfigDirectory))
             {
                 Directory.CreateDirectory(speedlaunchConfigDirectory);
             }
 
             string configFileName = "config.xml";
 
-            if (Program.isDebugMode) {
+            if (Program.isDebugMode)
+            {
                 configFileName = "config.debug.xml";
             }
 
-            string speedlaunchConfigFile = Path.Combine(confidDirectory, configFileName);
-
-
+            string speedlaunchConfigFile = Path.Combine(speedlaunchConfigDirectory, configFileName);
 
             if (!File.Exists(speedlaunchConfigFile) || Program.isDebugMode)
             {
@@ -326,12 +213,10 @@ namespace SpeedLaunch
             }
         }
 
-
-// INDEX
-//-----------------------------------------------------------------------------
+        // INDEX
+        //-----------------------------------------------------------------------------
         public void buildIndex()
         {
-            items.Clear();
             cache.Clear();
 
             foreach (Command command in commands)
@@ -339,7 +224,7 @@ namespace SpeedLaunch
                 if (command.type == "scan_directory_for_files")
                 {
                     List<string> extensions = command.extensions.Split(' ').ToList().ConvertAll(d => d.ToLower());
-   
+
                     string path = command.path;
 
                     path = path.Replace("%USER_PROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
@@ -347,13 +232,15 @@ namespace SpeedLaunch
                     path = path.Replace("%START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
 
 
-                    if (Directory.Exists(path)) {
+                    if (Directory.Exists(path))
+                    {
                         ProcessDirectory(
-                            path, 
+                            path,
                             (string filePath) => {
                                 string extension = Path.GetExtension(filePath);
 
-                                if (extensions.Contains(extension.ToLower().TrimStart('.'))) {
+                                if (extensions.Contains(extension.ToLower().TrimStart('.')))
+                                {
                                     Index i = new Index();
                                     i.text = Path.GetFileName(filePath);
                                     i.path = filePath;
@@ -363,7 +250,7 @@ namespace SpeedLaunch
                                 }
 
                                 return false;
-                            }, 
+                            },
                             (string directoryPath) => {
                                 return false;
                             }
@@ -380,7 +267,8 @@ namespace SpeedLaunch
 
         public static void ProcessDirectory(string path, CallBack f = null, CallBack d = null, int level = 10)
         {
-            if (level == 0) {
+            if (level == 0)
+            {
                 return;
             }
 
@@ -390,7 +278,8 @@ namespace SpeedLaunch
                 if (f != null)
                 {
                     bool cancel = f(fileName);
-                    if (cancel) {
+                    if (cancel)
+                    {
                         return;
                     }
                 }
@@ -399,7 +288,8 @@ namespace SpeedLaunch
 
             // Recurse into subdirectories of this directory.
             string[] subdirectoryEntries = Directory.GetDirectories(path);
-            foreach (string subdirectory in subdirectoryEntries) {
+            foreach (string subdirectory in subdirectoryEntries)
+            {
 
                 bool cancel = d(subdirectory);
                 if (cancel)
@@ -411,261 +301,26 @@ namespace SpeedLaunch
             }
         }
 
-// INPUTBOX
-//-----------------------------------------------------------------------------
-        private void inputBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Hide();
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-            }
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (inputBox.Text.Trim().ToLower() == ".close")
-                {
-                    Application.Exit();
-                }
-                else if (inputBox.Text.Trim().ToLower() == ".exit")
-                {
-                    Application.Exit();
-                }
-                else if (inputBox.Text.Trim().ToLower() == ".quit")
-                {
-                    Application.Exit();
-                }
-                else {
-                    ListItem item = getSelectedItem();
-                    if (item != null) {
-                        doItem(item);
-                    }
-                }
-
-                this.Hide();
-
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-            }
-
-            if (e.KeyCode == Keys.Down)
-            {
-                selectNextItem();
-            }
-
-            if (e.KeyCode == Keys.Up)
-            {
-                selectPrevItem();
-            }
-
-        }
-
-        private void inputBox_TextChanged(object sender, EventArgs e)
-        {
-            string search = inputBox.Text.Trim().ToLower();
-            filterItems(search);
-        }
-
-        public void filterItems(string search)
-        {
-            items.Clear();
-
-            int itemCount = 30;
-            foreach (Index index in cache)
-            {
-                if (index.text.ToLower().Contains(search))
-                {
-
-                    ListItem item = new ListItem();
-                    item.text = index.text;
-                    item.description = index.path;
-                    item.index = index;
-                    if (index.image == null) {
-                        index.image = GetImage(index.path);
-                    }                                       
-                    items.Add(item);
-
-                    itemCount--;
-                }
-
-                if (itemCount == 0)
-                {
-                    break;
-                }
-            }
-
-            if (items.Count > 0)
-            {
-                selectItem(items[0]);
-                setItemPositions();
-            }
-
-            Invalidate();
-        }
-
-        public void setItemPositions()
-        {
-            int w = this.Width;
-            int h = this.Height;
-
-            int l = 100;
-            int t = 200;
-
-            int p = 10; //padding
-
-            int i = 0;
-            foreach (ListItem item in items)
-            {
-
-                int il = l;
-                int it = t + i * 70 + p * i;
-                int iw = w - 200;
-                int ih = 70;
-
-                item.left = il;
-                item.top = it;
-                item.width = iw;
-                item.heighth = ih;
-
-                i++;
-            }
-
-            this.Invalidate();
-        }
-
-// ITEMS
-//-----------------------------------------------------------------------------
-
-        public ListItem getSelectedItem()
-        {
-            foreach (ListItem item in items)
-            {
-                if (item.selected) { 
-                    return item;
-                }
-            }
-
-            if (items.Count > 0)
-            {
-                return items[0];
-            }
-
-            return null;
-        }
-
-        public void selectItem(ListItem item)
-        {
-            unselectItems();
-            item.selected = true;
-        }
-
-        public void selectNextItem()
-        {
-            bool next = false;
-            for (int i =0; i< items.Count; i++) {
-                if (items[i].selected) {
-                    next = true;
-                    continue;
-                }
-
-                if (next) {
-                    selectItem(items[i]);
-                    break;
-                }
-            }
-            this.Invalidate();
-        }
-
-        public void selectPrevItem()
-        {
-            ListItem prev = null;
-            for (int i = 0; i < items.Count; i++)
-            {
-                
-                if (items[i].selected)
-                {
-                    if (prev != null) {
-                        selectItem(prev);
-                    }
-                    break;
-                }
-
-                prev = items[i];
-            }
-            this.Invalidate();
-        }
-
-        public void unselectItems()
-        {
-            foreach (ListItem it in items)
-            {
-                it.selected = false;
-            }
-        }
-
-        public void doItem(ListItem item)
-        {
-            string action = item.index.action;
-            string path = item.index.path;
-
-            if ("open_in_system" == action) {
-                this.Hide();
-                OpenPathInSystem(path);
-                inputBox.Text = "";
-            }
-        }
-
-// NOTIFICATION ICON
-//-----------------------------------------------------------------------------
+        // NOTIFICATION ICON
+        //-----------------------------------------------------------------------------
 
         private void notifyIcon_Click(object sender, EventArgs e)
         {
             Screen s = Screen.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
-            this.Location = s.WorkingArea.Location;
-            this.Show();
-            this.Activate();
-            this.WindowState = FormWindowState.Maximized;
-            SetForegroundWindow(Handle.ToInt32());
-            this.BringToFront();
-            this.Focus();
+            view.Location = s.WorkingArea.Location;
+            view.Show();
+            view.Activate();
+            view.WindowState = FormWindowState.Maximized;
+            SetForegroundWindow(view.Handle.ToInt32());
+            view.BringToFront();
+            view.Focus();
         }
 
-// SYSTEM TOOLS
-//-----------------------------------------------------------------------------
-        public static void OpenPathInSystem(string path)
+        void Exit(object sender, EventArgs e)
         {
-            if (File.Exists(path))       // OPEN FILE
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start(path);
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
-            }
-            else if (Directory.Exists(path))  // OPEN DIRECTORY
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start(path);
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
-            }
-        }
+            trayIcon.Visible = false;
 
-        public static Bitmap GetImage(string file)
-        {
-            try
-            {
-                Icon ico = Icon.ExtractAssociatedIcon(file);
-                return ico.ToBitmap();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            return null;
+            Application.Exit();
         }
 
         // HOOKS
@@ -705,20 +360,21 @@ namespace SpeedLaunch
                 else
                 if (LeftAlt && keyPressed.ToString() == "Space")
                 {
-                    Program.SpeedLaunch.Show();
-                    Program.SpeedLaunch.Activate();
-                    Program.SpeedLaunch.WindowState = FormWindowState.Maximized;
-                    SetForegroundWindow(Program.SpeedLaunch.Handle.ToInt32());
-                    Program.SpeedLaunch.BringToFront();
-                    Program.SpeedLaunch.Focus();
+                    view.Show();
+                    view.Activate();
+                    view.WindowState = FormWindowState.Maximized;
+                    SetForegroundWindow(view.Handle.ToInt32());
+                    view.BringToFront();
+                    view.Focus();
 
                     // move form to active screen
                     Screen s = Screen.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
-                    Program.SpeedLaunch.WindowState = FormWindowState.Normal;
-                    Program.SpeedLaunch.Location = new Point(s.WorkingArea.Location.X, s.WorkingArea.Location.Y);
-                    Program.SpeedLaunch.WindowState = FormWindowState.Maximized;
+                    view.WindowState = FormWindowState.Normal;
+                    view.Location = new Point(s.WorkingArea.Location.X, s.WorkingArea.Location.Y);
+                    view.WindowState = FormWindowState.Maximized;
                 }
-                else {
+                else
+                {
                     LeftAlt = false;
                 }
 
@@ -743,9 +399,6 @@ namespace SpeedLaunch
         [DllImport("User32.dll")]
         public static extern Int32 SetForegroundWindow(int hWnd);
 
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-
-        }
     }
+
 }

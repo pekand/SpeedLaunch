@@ -15,18 +15,15 @@ namespace SpeedLaunch
         public static bool isDebugMode = false;
 #endif
 
-        public static SpeedLaunch SpeedLaunch = new SpeedLaunch();
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CustomApplicationContext());
+            Application.Run(new SpeedLaunch());
         }
     }
 }

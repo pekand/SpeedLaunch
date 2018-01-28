@@ -1,6 +1,6 @@
 ﻿namespace SpeedLaunch
 {
-    partial class SpeedLaunch
+    partial class SpeedLaunchView
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpeedLaunch));
             this.inputBox = new System.Windows.Forms.TextBox();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // inputBox
@@ -48,7 +45,7 @@
             this.inputBox.TextChanged += new System.EventHandler(this.inputBox_TextChanged);
             this.inputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.inputBox_KeyDown);
             // 
-            // SpeedLaunch
+            // SpeedLaunchView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -56,9 +53,10 @@
             this.ClientSize = new System.Drawing.Size(1008, 588);
             this.Controls.Add(this.inputBox);
             this.DoubleBuffered = true;
-            this.Name = "SpeedLaunch";
+            this.Name = "SpeedLaunchView";
             this.Text = "SppedLaunch";
             this.Activated += new System.EventHandler(this.SpeedLaunch_Activated);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpeedLaunchView_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SpeedLaunch_FormClosed);
             this.Load += new System.EventHandler(this.SpeedLaunch_Load);
             this.Shown += new System.EventHandler(this.SpeedLaunch_Shown);
@@ -75,7 +73,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox inputBox;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 
