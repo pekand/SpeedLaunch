@@ -743,6 +743,9 @@ namespace SpeedLaunch
         [DllImport("User32.dll")]
         public static extern Int32 SetForegroundWindow(int hWnd);
 
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
 
+        }
     }
 }

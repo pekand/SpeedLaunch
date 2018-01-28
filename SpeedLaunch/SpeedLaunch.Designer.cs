@@ -48,13 +48,6 @@
             this.inputBox.TextChanged += new System.EventHandler(this.inputBox_TextChanged);
             this.inputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.inputBox_KeyDown);
             // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon";
-            this.notifyIcon1.Visible = true;
-            this.notifyIcon1.Click += new System.EventHandler(this.notifyIcon_Click);
-            // 
             // SpeedLaunch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
