@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using System.Windows.Input;
-using System.IO;
-using System.Xml;
-using System.Xml.Linq;
 using NCalc;
 using System.Text.RegularExpressions;
 
@@ -155,9 +145,14 @@ namespace SpeedLaunch
             
         }
 
+        private void SpeedLaunchView_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            context.Close();
+        }
 
-// INPUTBOX
-//-----------------------------------------------------------------------------
+
+        // INPUTBOX
+        //-----------------------------------------------------------------------------
         private void inputBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -265,7 +260,7 @@ namespace SpeedLaunch
                     item.description = index.path;
                     item.index = index;
                     if (index.image == null) {
-                        index.image = GetImage(index.path);
+                        index.image = Tools.GetImage(index.path);
                     }
                     items.Add(item);
 
@@ -398,53 +393,10 @@ namespace SpeedLaunch
 
             if ("open_in_system" == action) {
                 this.Hide();
-                OpenPathInSystem(path);
+                Tools.OpenPathInSystem(path);
                 inputBox.Text = "";
             }
         }
 
-
-
-// SYSTEM TOOLS
-//-----------------------------------------------------------------------------
-        public static void OpenPathInSystem(string path)
-        {
-            if (File.Exists(path))       // OPEN FILE
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start(path);
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
-            }
-            else if (Directory.Exists(path))  // OPEN DIRECTORY
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start(path);
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message); }
-            }
-        }
-
-        public static Bitmap GetImage(string file)
-        {
-            try
-            {
-                Icon ico = Icon.ExtractAssociatedIcon(file);
-                return ico.ToBitmap();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            return null;
-        }
-
-        private void SpeedLaunchView_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            context.Close();
-        }
     }
 }
