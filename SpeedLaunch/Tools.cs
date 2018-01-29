@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SpeedLaunch
@@ -40,6 +42,22 @@ namespace SpeedLaunch
             }
 
             return null;
+        }
+
+        public static void RunCommandAndExit(string cmd, string parameters = "")
+        {
+
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
+            };
+
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/C " + "\"" + cmd + ((parameters != "") ? " " + parameters : "") + "\"";
+
+            process.StartInfo = startInfo;
+            process.Start();
         }
 
     }

@@ -211,14 +211,32 @@ namespace SpeedLaunch
         {
             items.Clear();
 
-            Regex r = new Regex(@"^=(.*)$", RegexOptions.IgnoreCase);
-            
-            Match m = r.Match(search);
+            Regex rMatchCommand = new Regex(@"^\$(.*)$", RegexOptions.IgnoreCase);
 
-            if (m.Success) {                
+            Match matchCommand = rMatchCommand.Match(search);
+
+            if (matchCommand.Success)
+            {
+                string result = "";
+                string command = matchCommand.Groups[1].Captures[0].Value;
+
+                ListItem item = new ListItem();
+                item.text = command;
+                item.description = "command";                
+                item.index = new Index();
+                item.index.action = "run_system_command";
+                item.index.path = command;
+                items.Add(item);
+            }
+
+            Regex rMatchExpression = new Regex(@"^=(.*)$", RegexOptions.IgnoreCase);
+            
+            Match matchExpression = rMatchExpression.Match(search);
+
+            if (matchExpression.Success) {                
 
                 string result = "";
-                string exp = m.Groups[1].Captures[0].Value;
+                string exp = matchExpression.Groups[1].Captures[0].Value;
                 try
                 {
                     if (exp.Trim() != "") { 
@@ -394,6 +412,13 @@ namespace SpeedLaunch
             if ("open_in_system" == action) {
                 this.Hide();
                 Tools.OpenPathInSystem(path);
+                inputBox.Text = "";
+            }
+
+            if ("run_system_command" == action)
+            {
+                this.Hide();
+                Tools.RunCommandAndExit(path);
                 inputBox.Text = "";
             }
         }
