@@ -56,6 +56,10 @@
   <ItemGroup>
     <Compile Include="Command.cs" />
     <Compile Include="Hook.cs" />
+    <Compile Include="Job.cs" />
+    <Compile Include="Notification.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SpeedLaunch.cs" />
     <Compile Include="Index.cs" />
     <Compile Include="ListItem.cs" />

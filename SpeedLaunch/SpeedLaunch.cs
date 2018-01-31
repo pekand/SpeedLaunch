@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace SpeedLaunch
 {
@@ -162,7 +163,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                Program.ShowInfo(ex.Message);                
             }
         }
 
@@ -218,7 +219,7 @@ namespace SpeedLaunch
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message);
+                            Program.ShowInfo(ex.Message);
                         }
                     }
                     commands.Add(c);
@@ -232,48 +233,63 @@ namespace SpeedLaunch
         {
             cache.Clear();
 
-            foreach (Command command in commands)
-            {
-                if (command.type == "scan_directory_for_files")
-                {
-                    List<string> extensions = command.extensions.Split(' ').ToList().ConvertAll(d => d.ToLower());
-
-                    string path = command.path;
-
-                    path = path.Replace("%USER_PROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-                    path = path.Replace("%COMMON_START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
-                    path = path.Replace("%START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
-
-
-                    if (Directory.Exists(path))
+            Job.doJob(
+                new DoWorkEventHandler(
+                    delegate (object o, DoWorkEventArgs args)
                     {
-                        ProcessDirectory(
-                            path,
-                            (string filePath) => {
-                                string extension = Path.GetExtension(filePath);
+                        foreach (Command command in commands)
+                        {
+                            if (command.type == "scan_directory_for_files")
+                            {
+                                List<string> extensions = command.extensions.Split(' ').ToList().ConvertAll(d => d.ToLower());
 
-                                if (extensions.Contains(extension.ToLower().TrimStart('.')))
+                                string path = command.path;
+
+                                path = path.Replace("%USER_PROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+                                path = path.Replace("%COMMON_START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
+                                path = path.Replace("%START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+
+
+                                if (Directory.Exists(path))
                                 {
-                                    Index i = new Index();
-                                    i.text = Path.GetFileName(filePath);
-                                    i.path = filePath;
-                                    i.action = command.action;
-                                    i.priority = command.priority;
-                                    cache.Add(i);
+                                    ProcessDirectory(
+                                        path,
+                                        (string filePath) => {
+                                            string extension = Path.GetExtension(filePath);
+
+                                            if (extensions.Contains(extension.ToLower().TrimStart('.')))
+                                            {
+                                                Index i = new Index();
+                                                i.text = Path.GetFileName(filePath);
+                                                i.path = filePath;
+                                                i.action = command.action;
+                                                i.priority = command.priority;
+                                                cache.Add(i);
+                                            }
+
+                                            return false;
+                                        },
+                                        (string directoryPath) => {
+                                            return false;
+                                        }
+                                    );
+
                                 }
-
-                                return false;
-                            },
-                            (string directoryPath) => {
-                                return false;
                             }
-                        );
+                        }
 
+                        cache = cache.OrderBy(x => x.priority).ToList();
                     }
-                }
-            }
+                ),
+             new RunWorkerCompletedEventHandler(
+                    delegate (object o, RunWorkerCompletedEventArgs args)
+                    {
+                        // complete
+                    }
+                )
+             );
 
-            cache = cache.OrderBy(o => o.priority).ToList();
+            
         }
 
         public delegate bool CallBack(string path);
@@ -336,8 +352,15 @@ namespace SpeedLaunch
             Application.Exit();
         }
 
-        
+        public void ShowInfo(string text)
+        {
 
+            if (view != null)
+            {
+                view.ShowInfo(text);
+            }
+
+        }
     }
 
 }

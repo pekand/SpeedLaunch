@@ -8,7 +8,14 @@ namespace SpeedLaunch
 {
     static class Program
     {
+        public static SpeedLaunch speedLaunch = new SpeedLaunch();
 
+        public static void ShowInfo(string text)
+        {
+            if (speedLaunch != null) {
+                speedLaunch.ShowInfo(text);
+            }
+        }
 #if DEBUG
         public static bool isDebugMode = true;
 #else
@@ -23,7 +30,7 @@ namespace SpeedLaunch
         {
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SpeedLaunch());
+            Application.Run(speedLaunch);
         }
     }
 }

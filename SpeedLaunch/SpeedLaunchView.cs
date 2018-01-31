@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using NCalc;
 using System.Text.RegularExpressions;
+using System.ComponentModel;
 
 namespace SpeedLaunch
 {
@@ -278,7 +279,21 @@ namespace SpeedLaunch
                     item.description = index.path;
                     item.index = index;
                     if (index.image == null) {
-                        index.image = Tools.GetImage(index.path);
+                        
+                        Job.doJob(
+                            new DoWorkEventHandler(
+                                delegate (object o, DoWorkEventArgs args)
+                                {
+                                    index.image = Tools.GetImage(index.path);
+                                }
+                            ),
+                            new RunWorkerCompletedEventHandler(
+                                delegate (object o, RunWorkerCompletedEventArgs args)
+                                {
+                                    this.Invalidate();
+                                }
+                            )
+                         );
                     }
                     items.Add(item);
 
@@ -423,5 +438,11 @@ namespace SpeedLaunch
             }
         }
 
+        public void ShowInfo(string text)
+        {
+            
+            Notification n = new Notification(this);
+            n.SetText(text);
+        }
     }
 }
