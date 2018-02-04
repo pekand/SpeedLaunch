@@ -137,6 +137,7 @@ namespace SpeedLaunch
             if (e.KeyCode == Keys.F5)
             {
                 items.Clear();
+                context.loadConfigurationFile();
                 context.buildIndex();
             }
         }

@@ -71,6 +71,9 @@ namespace SpeedLaunch
 
         public void loadConfigurationFile()
         {
+            commands.Clear();
+            cache.Clear();
+
             string confidDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
             string speedlaunchConfigDirectory = Path.Combine(confidDirectory, "SpeedLaunch");
@@ -260,7 +263,7 @@ namespace SpeedLaunch
                                             if (extensions.Contains(extension.ToLower().TrimStart('.')))
                                             {
                                                 Index i = new Index();
-                                                i.text = Path.GetFileName(filePath);
+                                                i.text = Path.GetFileNameWithoutExtension(filePath);
                                                 i.path = filePath;
                                                 i.action = command.action;
                                                 i.priority = command.priority;
