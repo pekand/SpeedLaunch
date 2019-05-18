@@ -60,5 +60,12 @@ namespace SpeedLaunch
             process.Start();
         }
 
+        public static void RunCmdAndPreventCloseCommandPromp(string cmd, string parameters = "")
+        {
+
+            string strCmdText;
+            strCmdText = "/K " + cmd;
+            System.Diagnostics.Process.Start("CMD.exe", strCmdText);
+        }
     }
 }

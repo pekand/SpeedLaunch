@@ -1625,8 +1625,8 @@
       <fontcolor>Black</fontcolor>
       <text>filterItems</text>
       <layer>0</layer>
-      <x>2343.0</x>
-      <y>1839.078711985688805</y>
+      <x>2318.0</x>
+      <y>2014.078711985688805</y>
       <width>84</width>
       <height>36</height>
       <scale>0</scale>
@@ -1639,8 +1639,8 @@
       <fontcolor>Black</fontcolor>
       <text>selectNextItem</text>
       <layer>0</layer>
-      <x>2533.0</x>
-      <y>1717.078711985688805</y>
+      <x>2502.0</x>
+      <y>1837.078711985688805</y>
       <width>115</width>
       <height>36</height>
       <scale>0</scale>
@@ -1835,8 +1835,8 @@
       <fontcolor>Black</fontcolor>
       <text>doItem</text>
       <layer>0</layer>
-      <x>2898.0</x>
-      <y>1608.078711985688805</y>
+      <x>2906.0</x>
+      <y>1696.078711985688805</y>
       <width>66</width>
       <height>36</height>
       <scale>0</scale>
@@ -1849,8 +1849,8 @@
       <fontcolor>Black</fontcolor>
       <text>execute command</text>
       <layer>0</layer>
-      <x>2577.0</x>
-      <y>1585.078711985688805</y>
+      <x>2594.0</x>
+      <y>1686.078711985688805</y>
       <width>136</width>
       <height>36</height>
       <scale>0</scale>
@@ -1863,8 +1863,8 @@
       <fontcolor>Black</fontcolor>
       <text> Keys.Down</text>
       <layer>0</layer>
-      <x>2532.0</x>
-      <y>1662.078711985688805</y>
+      <x>2501.0</x>
+      <y>1782.078711985688805</y>
       <width>97</width>
       <height>36</height>
       <scale>0</scale>
@@ -1877,8 +1877,8 @@
       <fontcolor>Black</fontcolor>
       <text>Keys.Up</text>
       <layer>0</layer>
-      <x>2663.0</x>
-      <y>1663.078711985688805</y>
+      <x>2632.0</x>
+      <y>1783.078711985688805</y>
       <width>76</width>
       <height>36</height>
       <scale>0</scale>
@@ -1891,8 +1891,8 @@
       <fontcolor>Black</fontcolor>
       <text>search in items</text>
       <layer>0</layer>
-      <x>2208.0</x>
-      <y>1843.078711985688805</y>
+      <x>2183.0</x>
+      <y>2018.078711985688805</y>
       <width>116</width>
       <height>36</height>
       <scale>0</scale>
@@ -1905,8 +1905,8 @@
       <fontcolor>Black</fontcolor>
       <text>selectPrevItem</text>
       <layer>0</layer>
-      <x>2687.0</x>
-      <y>1708.078711985688805</y>
+      <x>2656.0</x>
+      <y>1828.078711985688805</y>
       <width>115</width>
       <height>36</height>
       <scale>0</scale>
@@ -1919,8 +1919,8 @@
       <fontcolor>Black</fontcolor>
       <text>getSelectedItem</text>
       <layer>0</layer>
-      <x>2727.0</x>
-      <y>1605.078711985688805</y>
+      <x>2743.0</x>
+      <y>1691.078711985688805</y>
       <width>123</width>
       <height>36</height>
       <scale>0</scale>
@@ -1976,8 +1976,8 @@
       <fontcolor>Black</fontcolor>
       <text>4</text>
       <layer>0</layer>
-      <x>2984.0</x>
-      <y>1600.078711985688805</y>
+      <x>3000.0</x>
+      <y>1688.078711985688805</y>
       <width>32</width>
       <height>36</height>
       <scale>0</scale>
@@ -2075,8 +2075,8 @@
       <fontcolor>Black</fontcolor>
       <text>custom serachs</text>
       <layer>0</layer>
-      <x>2461.0</x>
-      <y>1799.078711985688805</y>
+      <x>2436.0</x>
+      <y>1974.078711985688805</y>
       <width>120</width>
       <height>36</height>
       <scale>0</scale>
@@ -2089,8 +2089,8 @@
       <fontcolor>Black</fontcolor>
       <text>now</text>
       <layer>0</layer>
-      <x>2625.0</x>
-      <y>1870.078711985688805</y>
+      <x>2600.0</x>
+      <y>2045.078711985688805</y>
       <width>49</width>
       <height>36</height>
       <scale>0</scale>
@@ -2103,8 +2103,8 @@
       <fontcolor>Black</fontcolor>
       <text>time</text>
       <layer>0</layer>
-      <x>2691.0</x>
-      <y>1869.078711985688805</y>
+      <x>2666.0</x>
+      <y>2044.078711985688805</y>
       <width>50</width>
       <height>36</height>
       <scale>0</scale>
@@ -2117,8 +2117,8 @@
       <fontcolor>Black</fontcolor>
       <text>today</text>
       <layer>0</layer>
-      <x>2753.0</x>
-      <y>1867.078711985688805</y>
+      <x>2728.0</x>
+      <y>2042.078711985688805</y>
       <width>58</width>
       <height>36</height>
       <scale>0</scale>
@@ -2131,8 +2131,8 @@
       <fontcolor>Black</fontcolor>
       <text>=123+321</text>
       <layer>0</layer>
-      <x>2688.0</x>
-      <y>1771.078711985688805</y>
+      <x>2663.0</x>
+      <y>1946.078711985688805</y>
       <width>86</width>
       <height>36</height>
       <scale>0</scale>
@@ -2145,8 +2145,8 @@
       <fontcolor>Black</fontcolor>
       <text>ncalc</text>
       <layer>0</layer>
-      <x>2623.0</x>
-      <y>1771.078711985688805</y>
+      <x>2598.0</x>
+      <y>1946.078711985688805</y>
       <width>56</width>
       <height>36</height>
       <scale>0</scale>
@@ -2159,8 +2159,8 @@
       <fontcolor>Black</fontcolor>
       <text>filter items</text>
       <layer>0</layer>
-      <x>2488.0</x>
-      <y>1944.078711985688805</y>
+      <x>2463.0</x>
+      <y>2119.078711985688805</y>
       <width>87</width>
       <height>36</height>
       <scale>0</scale>
@@ -2173,8 +2173,8 @@
       <fontcolor>Black</fontcolor>
       <text>30 first items</text>
       <layer>0</layer>
-      <x>2608.0</x>
-      <y>1946.078711985688805</y>
+      <x>2583.0</x>
+      <y>2121.078711985688805</y>
       <width>102</width>
       <height>36</height>
       <scale>0</scale>
@@ -2187,8 +2187,8 @@
       <fontcolor>Black</fontcolor>
       <text>contin string</text>
       <layer>0</layer>
-      <x>2720.0</x>
-      <y>1946.078711985688805</y>
+      <x>2695.0</x>
+      <y>2121.078711985688805</y>
       <width>98</width>
       <height>36</height>
       <scale>0</scale>
@@ -2201,8 +2201,8 @@
       <fontcolor>Black</fontcolor>
       <text>lowercase</text>
       <layer>0</layer>
-      <x>2828.0</x>
-      <y>1946.078711985688805</y>
+      <x>2803.0</x>
+      <y>2121.078711985688805</y>
       <width>86</width>
       <height>36</height>
       <scale>0</scale>
@@ -2223,6 +2223,76 @@
       <color>#809BB9</color>
       <timecreate>2019-5-18 18:28:58</timecreate>
       <timemodify>2019-5-18 18:28:58</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>228</id>
+      <fontcolor>Black</fontcolor>
+      <text>RunCmdAndPreventCloseCommandPromp</text>
+      <layer>0</layer>
+      <x>531</x>
+      <y>2069</y>
+      <width>289</width>
+      <height>36</height>
+      <scale>0</scale>
+      <color>#82F500</color>
+      <timecreate>2019-5-19 00:33:16</timecreate>
+      <timemodify>2019-5-19 00:33:16</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>229</id>
+      <fontcolor>Black</fontcolor>
+      <text>$cmd</text>
+      <layer>0</layer>
+      <x>2596.0</x>
+      <y>1586.000000000000000</y>
+      <width>58</width>
+      <height>36</height>
+      <scale>0</scale>
+      <color>#809BB9</color>
+      <timecreate>2019-5-19 00:33:32</timecreate>
+      <timemodify>2019-5-19 00:33:32</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>230</id>
+      <fontcolor>Black</fontcolor>
+      <text>run command</text>
+      <layer>0</layer>
+      <x>2664.0</x>
+      <y>1586.000000000000000</y>
+      <width>108</width>
+      <height>36</height>
+      <scale>0</scale>
+      <color>#809BB9</color>
+      <timecreate>2019-5-19 00:33:38</timecreate>
+      <timemodify>2019-5-19 00:33:38</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>231</id>
+      <fontcolor>Black</fontcolor>
+      <text>&gt;cmd</text>
+      <layer>0</layer>
+      <x>2592.0</x>
+      <y>1642.000000000000000</y>
+      <width>58</width>
+      <height>36</height>
+      <scale>0</scale>
+      <color>#809BB9</color>
+      <timecreate>2019-5-19 00:33:42</timecreate>
+      <timemodify>2019-5-19 00:33:42</timemodify>
+    </rectangle>
+    <rectangle>
+      <id>232</id>
+      <fontcolor>Black</fontcolor>
+      <text>run comand in promp</text>
+      <layer>0</layer>
+      <x>2660.0</x>
+      <y>1642.000000000000000</y>
+      <width>153</width>
+      <height>36</height>
+      <scale>0</scale>
+      <color>#809BB9</color>
+      <timecreate>2019-5-19 00:33:48</timecreate>
+      <timemodify>2019-5-19 00:33:48</timemodify>
     </rectangle>
   </rectangles>
   <lines>
@@ -3253,6 +3323,46 @@
     <line>
       <start>227</start>
       <end>157</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>228</start>
+      <end>17</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>229</start>
+      <end>230</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>231</start>
+      <end>232</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>229</start>
+      <end>193</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>231</start>
+      <end>193</end>
       <scale>0</scale>
       <arrow>0</arrow>
       <color>Black</color>

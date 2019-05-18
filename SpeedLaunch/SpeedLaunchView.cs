@@ -154,7 +154,25 @@ namespace SpeedLaunch
 
             if (e.KeyCode == Keys.Enter)
             {
-                if (inputBox.Text.Trim().ToLower() == ".close")
+
+                Regex cmdMatchExpression = new Regex(@"^\$(.*)$", RegexOptions.IgnoreCase);
+
+                Match cmdMatchExpressionResult = cmdMatchExpression.Match(inputBox.Text);
+
+                Regex cmdPromptMatchExpression = new Regex(@"^>(.*)$", RegexOptions.IgnoreCase);
+
+                Match cmdPromptMatchExpressionResult = cmdPromptMatchExpression.Match(inputBox.Text);
+
+                if (cmdPromptMatchExpressionResult.Success)
+                {
+                    string cmd = cmdPromptMatchExpressionResult.Groups[1].Captures[0].Value;
+                    Tools.RunCmdAndPreventCloseCommandPromp(cmd);
+                } else  if (cmdMatchExpressionResult.Success)
+                {
+                    string cmd = cmdMatchExpressionResult.Groups[1].Captures[0].Value;
+                    Tools.RunCommandAndExit(cmd);
+                }
+                else if (inputBox.Text.Trim().ToLower() == ".close")
                 {
                     Application.Exit();
                 }
@@ -218,9 +236,9 @@ namespace SpeedLaunch
                 items.Add(item);
             }
 
-            Regex rMatchExpression = new Regex(@"^=(.*)$", RegexOptions.IgnoreCase);
+            Regex calcMatchExpression = new Regex(@"^=(.*)$", RegexOptions.IgnoreCase);
             
-            Match matchExpression = rMatchExpression.Match(search);
+            Match matchExpression = calcMatchExpression.Match(search);
 
             if (matchExpression.Success) {                
 
