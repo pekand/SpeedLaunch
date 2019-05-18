@@ -1250,7 +1250,7 @@
       <width>169</width>
       <height>36</height>
       <scale>0</scale>
-      <color>#FFFFB8</color>
+      <color>#809BB9</color>
       <timecreate>2019-5-18 17:13:45</timecreate>
       <timemodify>2019-5-18 17:13:45</timemodify>
     </rectangle>
@@ -1259,8 +1259,8 @@
       <fontcolor>Black</fontcolor>
       <text>%USER_PROFILE%</text>
       <layer>0</layer>
-      <x>1124.0</x>
-      <y>1050.078711985688805</y>
+      <x>1388.0</x>
+      <y>1163.078711985688805</y>
       <width>153</width>
       <height>36</height>
       <scale>0</scale>
@@ -1273,8 +1273,8 @@
       <fontcolor>Black</fontcolor>
       <text>%COMMON_START_MENU%</text>
       <layer>0</layer>
-      <x>1285.0</x>
-      <y>1051.078711985688805</y>
+      <x>1549.0</x>
+      <y>1164.078711985688805</y>
       <width>213</width>
       <height>36</height>
       <scale>0</scale>
@@ -1287,8 +1287,8 @@
       <fontcolor>Black</fontcolor>
       <text>%START_MENU%</text>
       <layer>0</layer>
-      <x>1507.0</x>
-      <y>1053.078711985688805</y>
+      <x>1771.0</x>
+      <y>1166.078711985688805</y>
       <width>141</width>
       <height>36</height>
       <scale>0</scale>
@@ -1320,7 +1320,7 @@
       <width>159</width>
       <height>36</height>
       <scale>0</scale>
-      <color>#FFFFB8</color>
+      <color>#809BB9</color>
       <timecreate>2019-5-18 17:17:51</timecreate>
       <timemodify>2019-5-18 17:17:51</timemodify>
     </rectangle>
@@ -1334,7 +1334,7 @@
       <width>102</width>
       <height>36</height>
       <scale>0</scale>
-      <color>#FFFFB8</color>
+      <color>#809BB9</color>
       <timecreate>2019-5-18 17:19:43</timecreate>
       <timemodify>2019-5-18 17:19:43</timemodify>
     </rectangle>
@@ -2210,6 +2210,20 @@
       <timecreate>2019-5-18 18:26:06</timecreate>
       <timemodify>2019-5-18 18:26:06</timemodify>
     </rectangle>
+    <rectangle>
+      <id>227</id>
+      <fontcolor>Black</fontcolor>
+      <text>custom variables in path</text>
+      <layer>0</layer>
+      <x>1201</x>
+      <y>1164</y>
+      <width>172</width>
+      <height>36</height>
+      <scale>0</scale>
+      <color>#809BB9</color>
+      <timecreate>2019-5-18 18:28:58</timecreate>
+      <timemodify>2019-5-18 18:28:58</timemodify>
+    </rectangle>
   </rectangles>
   <lines>
     <line>
@@ -2781,30 +2795,6 @@
       <layer>0</layer>
     </line>
     <line>
-      <start>153</start>
-      <end>157</end>
-      <scale>0</scale>
-      <arrow>0</arrow>
-      <color>Black</color>
-      <layer>0</layer>
-    </line>
-    <line>
-      <start>154</start>
-      <end>157</end>
-      <scale>0</scale>
-      <arrow>0</arrow>
-      <color>Black</color>
-      <layer>0</layer>
-    </line>
-    <line>
-      <start>155</start>
-      <end>157</end>
-      <scale>0</scale>
-      <arrow>0</arrow>
-      <color>Black</color>
-      <layer>0</layer>
-    </line>
-    <line>
       <start>160</start>
       <end>161</end>
       <scale>0</scale>
@@ -3247,6 +3237,22 @@
     <line>
       <start>225</start>
       <end>226</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>227</start>
+      <end>153</end>
+      <scale>0</scale>
+      <arrow>0</arrow>
+      <color>Black</color>
+      <layer>0</layer>
+    </line>
+    <line>
+      <start>227</start>
+      <end>157</end>
       <scale>0</scale>
       <arrow>0</arrow>
       <color>Black</color>
