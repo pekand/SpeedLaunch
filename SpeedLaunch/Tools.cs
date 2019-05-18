@@ -17,7 +17,7 @@ namespace SpeedLaunch
                 {
                     System.Diagnostics.Process.Start(path);
                 }
-                catch (Exception ex) { Program.ShowInfo(ex.Message); }
+                catch (Exception ex) { MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
             }
             else if (Directory.Exists(path))  // OPEN DIRECTORY
             {
@@ -25,7 +25,7 @@ namespace SpeedLaunch
                 {
                     System.Diagnostics.Process.Start(path);
                 }
-                catch (Exception ex) { Program.ShowInfo(ex.Message); }
+                catch (Exception ex) { MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
             }
         }
 
@@ -38,7 +38,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                Program.ShowInfo(ex.Message);
+                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             return null;

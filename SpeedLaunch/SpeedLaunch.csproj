@@ -57,18 +57,9 @@
     <Compile Include="Command.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="Job.cs" />
-    <Compile Include="Notification.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="SpeedLaunch.cs" />
     <Compile Include="Index.cs" />
     <Compile Include="ListItem.cs" />
-    <Compile Include="ListPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ListPanel.Designer.cs">
-      <DependentUpon>ListPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="SpeedLaunchView.cs">
       <SubType>Form</SubType>
     </Compile>

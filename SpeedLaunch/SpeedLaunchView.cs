@@ -117,18 +117,11 @@ namespace SpeedLaunch
 
         private void SpeedLaunch_MouseClick(object sender, MouseEventArgs e)
         {
-            mx = e.X;
-            my = e.Y;
-
-            foreach (ListItem item in items)
+            ListItem item = getSelectedItem();
+            if (item != null)
             {
-
-                if (item.left <= mx && mx <= item.left + item.width && item.top <= my && my <= item.top + item.heighth)
-                {
-                    selectItem(item);
-                    doItem(item);
-                    return;
-                }
+                doItem(item);
+                return;
             }
         }
 
@@ -140,11 +133,6 @@ namespace SpeedLaunch
                 context.loadConfigurationFile();
                 context.buildIndex();
             }
-        }
-
-        private void SpeedLaunch_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            
         }
 
         private void SpeedLaunchView_FormClosing(object sender, FormClosingEventArgs e)
@@ -219,7 +207,6 @@ namespace SpeedLaunch
 
             if (matchCommand.Success)
             {
-                string result = "";
                 string command = matchCommand.Groups[1].Captures[0].Value;
 
                 ListItem item = new ListItem();
@@ -439,11 +426,6 @@ namespace SpeedLaunch
             }
         }
 
-        public void ShowInfo(string text)
-        {
-            
-            Notification n = new Notification(this);
-            n.SetText(text);
-        }
+        
     }
 }

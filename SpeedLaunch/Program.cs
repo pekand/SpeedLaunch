@@ -10,12 +10,7 @@ namespace SpeedLaunch
     {
         public static SpeedLaunch speedLaunch = new SpeedLaunch();
 
-        public static void ShowInfo(string text)
-        {
-            if (speedLaunch != null) {
-                speedLaunch.ShowInfo(text);
-            }
-        }
+        
 #if DEBUG
         public static bool isDebugMode = true;
 #else

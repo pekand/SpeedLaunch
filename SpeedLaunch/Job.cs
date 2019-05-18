@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace SpeedLaunch
 {
@@ -42,7 +43,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                Program.ShowInfo(ex.Message);
+                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
     }

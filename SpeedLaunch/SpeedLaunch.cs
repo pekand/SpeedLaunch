@@ -27,21 +27,6 @@ namespace SpeedLaunch
 
         public SpeedLaunch()
         {
-            Hook.registerHook(() => {
-                view.Show();
-                view.Activate();
-                view.WindowState = FormWindowState.Maximized;
-                Hook.SetForegroundWindow(view.Handle.ToInt32());
-                view.BringToFront();
-                view.Focus();
-
-                // move form to active screen
-                Screen s = Screen.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
-                view.WindowState = FormWindowState.Normal;
-                view.Location = new Point(s.WorkingArea.Location.X, s.WorkingArea.Location.Y);
-                view.WindowState = FormWindowState.Maximized;
-            });
-
             loadConfigurationFile();
             buildIndex();
 
@@ -56,9 +41,26 @@ namespace SpeedLaunch
 
             trayIcon.MouseDoubleClick += new MouseEventHandler(this.notifyIcon_Click);
 
+            Hook.registerHook(this.showSpeedLaunch);
+
             view = new SpeedLaunchView(this);
         }
 
+        public void showSpeedLaunch() {            
+                view.Show();
+                view.Activate();
+                view.WindowState = FormWindowState.Maximized;
+                Hook.SetForegroundWindow(view.Handle.ToInt32());
+                view.BringToFront();
+                view.Focus();
+
+                // move form to active screen
+                Screen s = Screen.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
+                view.WindowState = FormWindowState.Normal;
+                view.Location = new Point(s.WorkingArea.Location.X, s.WorkingArea.Location.Y);
+                view.WindowState = FormWindowState.Maximized;
+            }
+            
         public void Close()
         {
             view = null;
@@ -72,17 +74,20 @@ namespace SpeedLaunch
         public void loadConfigurationFile()
         {
             commands.Clear();
-            cache.Clear();
 
+            // get AppData directory
             string confidDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
+            // get speedlanch directory in AppData 
             string speedlaunchConfigDirectory = Path.Combine(confidDirectory, "SpeedLaunch");
 
+            // create speedlaunch config directory if not exists
             if (!Directory.Exists(speedlaunchConfigDirectory))
             {
                 Directory.CreateDirectory(speedlaunchConfigDirectory);
             }
 
+            
             string configFileName = "config.xml";
 
             if (Program.isDebugMode)
@@ -92,6 +97,7 @@ namespace SpeedLaunch
 
             string speedlaunchConfigFile = Path.Combine(speedlaunchConfigDirectory, configFileName);
 
+            // create default config file if not exits
             if (!File.Exists(speedlaunchConfigFile) || Program.isDebugMode)
             {
 
@@ -115,24 +121,6 @@ namespace SpeedLaunch
         <keywords></keywords>
         <action>open_in_system</action>
     </command>
-    <command>
-        <name>diagrams</name>
-        <type>scan_directory_for_files</type>
-        <priority>1</priority>
-        <path>o:\Diagrams\</path>
-        <extensions>diagram</extensions>
-        <keywords></keywords>
-        <action>open_in_system</action>
-    </command>
-    <command>
-        <name>scripts</name>
-        <type>scan_directory_for_files</type>
-        <priority>1</priority>
-        <path>o:\Scripts\</path>
-        <extensions>bat exe ps1 py pyw</extensions>
-        <keywords></keywords>
-        <action>open_in_system</action>
-    </command>
 </commands>
 </config>";
                 File.WriteAllText(speedlaunchConfigFile, config);
@@ -143,6 +131,7 @@ namespace SpeedLaunch
                 CheckCharacters = false
             };
 
+            // load config file
             string xml = File.ReadAllText(speedlaunchConfigFile);
 
             try
@@ -166,7 +155,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                Program.ShowInfo(ex.Message);                
+                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -222,7 +211,7 @@ namespace SpeedLaunch
                         }
                         catch (Exception ex)
                         {
-                            Program.ShowInfo(ex.Message);
+                            MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
                     commands.Add(c);
@@ -338,32 +327,17 @@ namespace SpeedLaunch
 
         private void notifyIcon_Click(object sender, EventArgs e)
         {
-            Screen s = Screen.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
-            view.Location = s.WorkingArea.Location;
-            view.Show();
-            view.Activate();
-            view.WindowState = FormWindowState.Maximized;
-            Hook.SetForegroundWindow(view.Handle.ToInt32());
-            view.BringToFront();
-            view.Focus();
+            this.showSpeedLaunch();            
         }
 
         void Exit(object sender, EventArgs e)
         {
             trayIcon.Visible = false;
 
-            Application.Exit();
+            this.Close();
         }
 
-        public void ShowInfo(string text)
-        {
-
-            if (view != null)
-            {
-                view.ShowInfo(text);
-            }
-
-        }
+        
     }
 
 }

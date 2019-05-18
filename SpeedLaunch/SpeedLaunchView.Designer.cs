@@ -57,7 +57,6 @@
             this.Text = "SppedLaunch";
             this.Activated += new System.EventHandler(this.SpeedLaunch_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SpeedLaunchView_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SpeedLaunch_FormClosed);
             this.Load += new System.EventHandler(this.SpeedLaunch_Load);
             this.Shown += new System.EventHandler(this.SpeedLaunch_Shown);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SpeedLaunch_Paint);
