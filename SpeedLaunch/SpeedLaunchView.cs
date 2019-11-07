@@ -117,11 +117,19 @@ namespace SpeedLaunch
 
         private void SpeedLaunch_MouseClick(object sender, MouseEventArgs e)
         {
-            ListItem item = getSelectedItem();
-            if (item != null)
+            mx = e.X;
+            my = e.Y;
+
+            foreach (ListItem item in items)
             {
-                doItem(item);
-                return;
+
+                if (item.left <= mx && mx <= item.left + item.width && item.top <= my && my <= item.top + item.heighth)
+                {
+                    selectItem(item);
+                    doItem(item);
+                    Invalidate();
+                    return;
+                }
             }
         }
 
@@ -329,6 +337,17 @@ namespace SpeedLaunch
             int l = 100;
             int t = 200;
 
+            int iw = w - 200;
+            int ih = 70;
+
+
+            if (Screen.PrimaryScreen.Bounds.Width > 1920) {
+                l = (Screen.PrimaryScreen.Bounds.Width - 1920) / 2;
+                iw = 1920;
+            }
+
+ 
+
             int p = 10; //padding
 
             int i = 0;
@@ -337,8 +356,7 @@ namespace SpeedLaunch
 
                 int il = l;
                 int it = t + i * 70 + p * i;
-                int iw = w - 200;
-                int ih = 70;
+               
 
                 item.left = il;
                 item.top = it;
