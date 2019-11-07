@@ -22,14 +22,19 @@ namespace SpeedLaunch
 
         private NotifyIcon trayIcon;
        
+        // LIST_OF_COMMANDS
         public List<Command> commands = new List<Command>();
+        
+        // LIST_OF_COMMANDS_INCEX_CACHE
         public List<Index> cache = new List<Index>();
 
+        // SPEEDLAUNCH_CONSTRUCTOR
         public SpeedLaunch()
         {
             loadConfigurationFile();
             buildIndex();
 
+            //CREATE_TRY_ICON
             trayIcon = new NotifyIcon()
             {
                 Icon = Resources.SpeedLaunch,
@@ -41,25 +46,28 @@ namespace SpeedLaunch
 
             trayIcon.MouseDoubleClick += new MouseEventHandler(this.notifyIcon_Click);
 
+            //REGISTER_KEYBOARD_HOOK
             Hook.registerHook(this.showSpeedLaunch);
 
+            //CREATE_SPEEDLAUNCH_VIEW
             view = new SpeedLaunchView(this);
         }
 
+        // SHOW_SPEED_LAUNCH
         public void showSpeedLaunch() {            
-                view.Show();
-                view.Activate();
-                view.WindowState = FormWindowState.Maximized;
-                Hook.SetForegroundWindow(view.Handle.ToInt32());
-                view.BringToFront();
-                view.Focus();
+            view.Show();
+            view.Activate();
+            view.WindowState = FormWindowState.Maximized;
+            Hook.SetForegroundWindow(view.Handle.ToInt32());
+            view.BringToFront();
+            view.Focus();
 
-                // move form to active screen
-                Screen s = Screen.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
-                view.WindowState = FormWindowState.Normal;
-                view.Location = new Point(s.WorkingArea.Location.X, s.WorkingArea.Location.Y);
-                view.WindowState = FormWindowState.Maximized;
-            }
+            // move form to active screen
+            Screen s = Screen.FromPoint(new Point(Cursor.Position.X, Cursor.Position.Y));
+            view.WindowState = FormWindowState.Normal;
+            view.Location = new Point(s.WorkingArea.Location.X, s.WorkingArea.Location.Y);
+            view.WindowState = FormWindowState.Maximized;
+        }
             
         public void Close()
         {
@@ -71,6 +79,7 @@ namespace SpeedLaunch
         // CONFIGURATION
         //-----------------------------------------------------------------------------
 
+        // LOAD_CONFIGURATION_FILE
         public void loadConfigurationFile()
         {
             commands.Clear();
@@ -97,7 +106,7 @@ namespace SpeedLaunch
 
             string speedlaunchConfigFile = Path.Combine(speedlaunchConfigDirectory, configFileName);
 
-            // create default config file if not exits
+            // CREATE_DEFAULT_CONFIG_FILE
             if (!File.Exists(speedlaunchConfigFile) || Program.isDebugMode)
             {
 
@@ -159,6 +168,7 @@ namespace SpeedLaunch
             }
         }
 
+        // LOAD_COMMAND_CONFIG_FROM_CONFIG_FILE
         public void LoadInnerXmlCommands(XElement commandsElement)
         {
             foreach (XElement command in commandsElement.Descendants())
@@ -221,22 +231,26 @@ namespace SpeedLaunch
 
         // INDEX
         //-----------------------------------------------------------------------------
+        // BUILD_INDEX_FROM_COMMANDS
         public void buildIndex()
         {
             cache.Clear();
 
+            //BUILD_INDEX_WORKER
             Job.doJob(
                 new DoWorkEventHandler(
                     delegate (object o, DoWorkEventArgs args)
                     {
                         foreach (Command command in commands)
                         {
+                            // COMMAND_SCAN_DIRECTORY_FOR_FILES
                             if (command.type == "scan_directory_for_files")
                             {
                                 List<string> extensions = command.extensions.Split(' ').ToList().ConvertAll(d => d.ToLower());
 
                                 string path = command.path;
 
+                                // COMMAND_SCAN_DIRECTORY_FOR_FILES_PATH_VARIABLES
                                 path = path.Replace("%USER_PROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
                                 path = path.Replace("%COMMON_START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
                                 path = path.Replace("%START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
@@ -325,11 +339,13 @@ namespace SpeedLaunch
         // NOTIFICATION ICON
         //-----------------------------------------------------------------------------
 
+        //SHOW_SPEEDLAUNCH
         private void notifyIcon_Click(object sender, EventArgs e)
         {
             this.showSpeedLaunch();            
         }
 
+        //CLOSE_SPEED_LAUNCH
         void Exit(object sender, EventArgs e)
         {
             trayIcon.Visible = false;

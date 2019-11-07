@@ -13,6 +13,7 @@ namespace SpeedLaunch
 
         SpeedLaunch context = null;
 
+        // SPEEDLAUNCH_VIEW_ITEMS
         private List<ListItem> items = new List<ListItem>();
 
         public int mx = 0;
@@ -21,12 +22,14 @@ namespace SpeedLaunch
 
 // EVENTS
 //-----------------------------------------------------------------------------
+        // SPEEDLAUNCH_VIEW_CONSTROCTOR
         public SpeedLaunchView(SpeedLaunch context)
         {
             this.context = context;
             InitializeComponent();
         }
-
+        
+        // SPEEDLAUNCH_VIEW_LOAD
         private void SpeedLaunch_Load(object sender, EventArgs e)
         {
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -35,25 +38,27 @@ namespace SpeedLaunch
             this.KeyPreview = true;
         }
 
+        // SPEEDLAUNCH_VIEW_ACTIVATED
         private void SpeedLaunch_Activated(object sender, EventArgs e)
         {
             inputBox.Focus();
         }
-
+        // SPEEDLAUNCH_VIEW_SHOWN
         private void SpeedLaunch_Shown(object sender, EventArgs e)
         {
+            setItemPositions();
             inputBox.Focus();
         }
 
+        // SPEEDLAUNCH_VIEW_RESIZE
         private void SpeedLaunch_Resize(object sender, EventArgs e)
         {
             inputBox.Width = (int)(this.Width * 0.5);
 
             inputBox.Left = (this.Width - inputBox.Width) / 2;
-
-
         }
-
+        
+        // SPEEDLAUNCH_VIEW_PAINT
         private void SpeedLaunch_Paint(object sender, PaintEventArgs e)
         {
 
@@ -97,7 +102,8 @@ namespace SpeedLaunch
 
 
         }
-
+        
+        // SPEEDLAUNCH_VIEW_MOUSEMOVE
         private void SpeedLaunch_MouseMove(object sender, MouseEventArgs e)
         {
             mx = e.X;
@@ -115,6 +121,7 @@ namespace SpeedLaunch
             }
         }
 
+        // SPEEDLAUNCH_VIEW_MOUSECLICK
         private void SpeedLaunch_MouseClick(object sender, MouseEventArgs e)
         {
             mx = e.X;
@@ -133,6 +140,7 @@ namespace SpeedLaunch
             }
         }
 
+        // SPEEDLAUNCH_VIEW_KEYDOWN
         private void SpeedLaunch_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F5)
@@ -142,7 +150,8 @@ namespace SpeedLaunch
                 context.buildIndex();
             }
         }
-
+        
+        // SPEEDLAUNCH_VIEW_FORMCLOSING
         private void SpeedLaunchView_FormClosing(object sender, FormClosingEventArgs e)
         {
             context.Close();
@@ -151,8 +160,11 @@ namespace SpeedLaunch
 
         // INPUTBOX
         //-----------------------------------------------------------------------------
+        // INPUT_BOX_KEYDOWN
         private void inputBox_KeyDown(object sender, KeyEventArgs e)
         {
+            
+            // INPUT_BOX_KEYDOWN_ESC
             if (e.KeyCode == Keys.Escape)
             {
                 this.Hide();
@@ -160,6 +172,7 @@ namespace SpeedLaunch
                 e.SuppressKeyPress = true;
             }
 
+            // INPUT_BOX_KEYDOWN_ENTER
             if (e.KeyCode == Keys.Enter)
             {
 
@@ -217,12 +230,14 @@ namespace SpeedLaunch
 
         }
 
+        // INPUT_BOX_TEXTCHANGED
         private void inputBox_TextChanged(object sender, EventArgs e)
         {
             string search = inputBox.Text.Trim().ToLower();
             filterItems(search);
         }
 
+        // INPUT_BOX_FILTERITEMS
         public void filterItems(string search)
         {
             items.Clear();
@@ -329,6 +344,7 @@ namespace SpeedLaunch
             Invalidate();
         }
 
+        // SPEEDLAUNCH_VIEW_SETITEMPOSITIONS
         public void setItemPositions()
         {
             int w = this.Width;
@@ -340,14 +356,12 @@ namespace SpeedLaunch
             int iw = w - 200;
             int ih = 70;
 
-
-            if (Screen.PrimaryScreen.Bounds.Width > 1920) {
-                l = (Screen.PrimaryScreen.Bounds.Width - 1920) / 2;
+            Screen screen = Screen.FromControl(this);
+            if (screen.Bounds.Width > 1920) {
+                l = (screen.Bounds.Width - 1920) / 2;
                 iw = 1920;
             }
-
- 
-
+            
             int p = 10; //padding
 
             int i = 0;
@@ -372,6 +386,7 @@ namespace SpeedLaunch
 // ITEMS
 //-----------------------------------------------------------------------------
 
+        // SPEEDLAUNCH_VIEW_GETSELECTEDITEM
         public ListItem getSelectedItem()
         {
             foreach (ListItem item in items)
@@ -389,12 +404,14 @@ namespace SpeedLaunch
             return null;
         }
 
+        // SPEEDLAUNCH_VIEW_SELECTITEM
         public void selectItem(ListItem item)
         {
             unselectItems();
             item.selected = true;
         }
 
+        // SPEEDLAUNCH_VIEW_SELECTNEXTITEM
         public void selectNextItem()
         {
             bool next = false;
@@ -412,6 +429,7 @@ namespace SpeedLaunch
             this.Invalidate();
         }
 
+        // SPEEDLAUNCH_VIEW_SELECTPREVITEM
         public void selectPrevItem()
         {
             ListItem prev = null;
@@ -431,6 +449,7 @@ namespace SpeedLaunch
             this.Invalidate();
         }
 
+        // SPEEDLAUNCH_VIEW_UNSELECTITEMS
         public void unselectItems()
         {
             foreach (ListItem it in items)
@@ -439,6 +458,7 @@ namespace SpeedLaunch
             }
         }
 
+        // SPEEDLAUNCH_VIEW_DOITEM
         public void doItem(ListItem item)
         {
             if (item.index == null) {
@@ -448,12 +468,14 @@ namespace SpeedLaunch
             string action = item.index.action;
             string path = item.index.path;
 
+            // SPEEDLAUNCH_VIEW_DOITEM_ACTION_OPEN_IN_SYSTEM
             if ("open_in_system" == action) {
                 this.Hide();
                 Tools.OpenPathInSystem(path);
                 inputBox.Text = "";
             }
 
+            // SPEEDLAUNCH_VIEW_DOITEM_ACTION_RUN_SYSTEM_COMMAND
             if ("run_system_command" == action)
             {
                 this.Hide();

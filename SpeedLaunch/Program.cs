@@ -10,7 +10,7 @@ namespace SpeedLaunch
     {
         public static SpeedLaunch speedLaunch = new SpeedLaunch();
 
-        
+        // IS_DEBUG_MODE
 #if DEBUG
         public static bool isDebugMode = true;
 #else

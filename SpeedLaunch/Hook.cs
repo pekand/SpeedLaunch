@@ -51,6 +51,7 @@ namespace SpeedLaunch
 
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
+            //OPEN_SPEEDLAUNCH_KEY
             if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
             {
                 int vkCode = Marshal.ReadInt32(lParam);

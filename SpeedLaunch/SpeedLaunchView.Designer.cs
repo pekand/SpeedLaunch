@@ -25,8 +25,8 @@
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
+        /// </summary>        
+        private void InitializeComponent() // SPEEDLAUNCH_VIEW_INITIALIZECOMPONENT
         {
             this.inputBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
