@@ -66,8 +66,8 @@
       <text>Hook.cs</text>
       <link>SpeedLaunch\Hook.cs</link>
       <layer>0</layer>
-      <x>2044.0</x>
-      <y>-86.000000000000000</y>
+      <x>1892.0</x>
+      <y>-101.000000000000000</y>
       <width>74</width>
       <height>36</height>
       <scale>0</scale>
@@ -96,8 +96,8 @@
       <text>Job.cs</text>
       <link>SpeedLaunch\Job.cs</link>
       <layer>0</layer>
-      <x>2044.0</x>
-      <y>-142.000000000000000</y>
+      <x>1892.0</x>
+      <y>-157.000000000000000</y>
       <width>64</width>
       <height>36</height>
       <scale>0</scale>
@@ -199,8 +199,8 @@
       <fontcolor>Black</fontcolor>
       <text>OpenPathInSystem</text>
       <layer>0</layer>
-      <x>2198.0</x>
-      <y>-268.921288014311195</y>
+      <x>2046.0</x>
+      <y>-283.921288014311195</y>
       <width>143</width>
       <height>36</height>
       <scale>0</scale>
@@ -228,8 +228,8 @@
       <text>Tools.cs</text>
       <link>SpeedLaunch\Tools.cs</link>
       <layer>0</layer>
-      <x>2044.0</x>
-      <y>-202.000000000000000</y>
+      <x>1892.0</x>
+      <y>-217.000000000000000</y>
       <width>75</width>
       <height>36</height>
       <scale>0</scale>
@@ -287,7 +287,7 @@
       <link>~SHOW_SPEED_LAUNCH</link>
       <layer>0</layer>
       <x>1970</x>
-      <y>482</y>
+      <y>502.078711985688805</y>
       <width>141</width>
       <height>36</height>
       <scale>0</scale>
@@ -418,8 +418,8 @@
       <fontcolor>Black</fontcolor>
       <text>GetImage</text>
       <layer>0</layer>
-      <x>2204.0</x>
-      <y>-214.921288014311195</y>
+      <x>2052.0</x>
+      <y>-229.921288014311195</y>
       <width>84</width>
       <height>36</height>
       <scale>0</scale>
@@ -432,8 +432,8 @@
       <fontcolor>Black</fontcolor>
       <text>RunCommandAndExit</text>
       <layer>0</layer>
-      <x>2198.0</x>
-      <y>-159.921288014311195</y>
+      <x>2046.0</x>
+      <y>-174.921288014311195</y>
       <width>160</width>
       <height>36</height>
       <scale>0</scale>
@@ -819,7 +819,7 @@
       <text>1</text>
       <layer>0</layer>
       <x>2147.0</x>
-      <y>468.078711985688805</y>
+      <y>502.078711985688805</y>
       <width>32</width>
       <height>36</height>
       <scale>0</scale>
@@ -919,8 +919,8 @@
       <fontcolor>Black</fontcolor>
       <text>doJob</text>
       <layer>0</layer>
-      <x>2116.0</x>
-      <y>-145.921288014311195</y>
+      <x>1964.0</x>
+      <y>-160.921288014311195</y>
       <width>61</width>
       <height>36</height>
       <scale>0</scale>
@@ -933,8 +933,8 @@
       <fontcolor>Black</fontcolor>
       <text>registerHook</text>
       <layer>0</layer>
-      <x>2131.0</x>
-      <y>-104.921288014311195</y>
+      <x>1979.0</x>
+      <y>-119.921288014311195</y>
       <width>102</width>
       <height>36</height>
       <scale>0</scale>
@@ -947,8 +947,8 @@
       <fontcolor>Black</fontcolor>
       <text>unregisterHook</text>
       <layer>0</layer>
-      <x>2136.0</x>
-      <y>-58.921288014311195</y>
+      <x>1984.0</x>
+      <y>-73.921288014311195</y>
       <width>117</width>
       <height>36</height>
       <scale>0</scale>
@@ -961,8 +961,8 @@
       <fontcolor>Black</fontcolor>
       <text>SetHook</text>
       <layer>0</layer>
-      <x>2133.0</x>
-      <y>-8.921288014311195</y>
+      <x>1981.0</x>
+      <y>-23.921288014311195</y>
       <width>77</width>
       <height>36</height>
       <scale>0</scale>
@@ -2261,8 +2261,8 @@
       <fontcolor>Black</fontcolor>
       <text>RunCmdAndPreventCloseCommandPromp</text>
       <layer>0</layer>
-      <x>2190.0</x>
-      <y>-310.000000000000000</y>
+      <x>2038.0</x>
+      <y>-325.000000000000000</y>
       <width>289</width>
       <height>36</height>
       <scale>0</scale>

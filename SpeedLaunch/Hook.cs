@@ -15,10 +15,20 @@ namespace SpeedLaunch
         //-----------------------------------------------------------------------------
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
+        private const int WM_KEYUP = 0x0101;
         private const int WM_SYSKEYDOWN = 0x0104;
+        private const int WM_SYSKEYUP = 0x0105;
 
         private static LowLevelKeyboardProc _proc = HookCallback;
         private static IntPtr _hookID = IntPtr.Zero;
+
+        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+
+        public static bool LeftAlt = false;
+
+        public delegate void CallBackAfterAltSpacePressed();
+
+        public static CallBackAfterAltSpacePressed altSpacePressed = null;
 
         public static void registerHook(CallBackAfterAltSpacePressed callBack)
         {
@@ -41,14 +51,6 @@ namespace SpeedLaunch
             }
         }
 
-        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
-
-        public static bool LeftAlt = false;
-
-        public delegate void CallBackAfterAltSpacePressed();
-
-        public static CallBackAfterAltSpacePressed altSpacePressed = null;
-
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             //OPEN_SPEEDLAUNCH_KEY
@@ -62,7 +64,7 @@ namespace SpeedLaunch
                 {
                     LeftAlt = true;
                 }
-                else
+
                 if (LeftAlt && keyPressed.ToString() == "Space")
                 {
                     if (altSpacePressed != null)
@@ -70,11 +72,19 @@ namespace SpeedLaunch
                         altSpacePressed();
                     }
                 }
-                else
+
+            }
+
+            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                var keyPressed = KeyInterop.KeyFromVirtualKey(vkCode);
+
+
+                if (keyPressed.ToString() == "LeftAlt")
                 {
                     LeftAlt = false;
                 }
-
             }
 
             return CallNextHookEx(_hookID, nCode, wParam, lParam);

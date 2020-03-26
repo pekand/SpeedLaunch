@@ -6,7 +6,7 @@ namespace SpeedLaunch
 {
     /// <summary>
     /// repository for thread related functions</summary>
-    public class Job //UID8736422044
+    public class Job
     {
         /// <summary>
         /// run task in thread </summary>
