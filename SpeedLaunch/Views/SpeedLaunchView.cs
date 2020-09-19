@@ -246,8 +246,10 @@ namespace SpeedLaunch
 
             Match matchCommand = rMatchCommand.Match(search);
 
-            if (matchCommand.Success)
+            if (matchCommand.Success) // check if command start with $ -> system command
             {
+
+                // add system command to list
                 string command = matchCommand.Groups[1].Captures[0].Value;
 
                 ListItem item = new ListItem();
@@ -263,7 +265,7 @@ namespace SpeedLaunch
             
             Match matchExpression = calcMatchExpression.Match(search);
 
-            if (matchExpression.Success) {                
+            if (matchExpression.Success) { // check if command start with = -> calc comand            
 
                 string result = "";
                 string exp = matchExpression.Groups[1].Captures[0].Value;
@@ -286,7 +288,7 @@ namespace SpeedLaunch
                 items.Add(item);
             }
 
-            if (search == "now" || search == "time" || search == "today")
+            if (search == "now" || search == "time" || search == "today") // check if it time command
             {
 
                 ListItem item = new ListItem();
@@ -298,7 +300,7 @@ namespace SpeedLaunch
             }
 
             int itemCount = 30;
-            foreach (Index index in context.cache)
+            foreach (Index index in context.cache) // filter items from cache
             {
                 if (index.text.ToLower().Contains(search))
                 {
@@ -467,6 +469,8 @@ namespace SpeedLaunch
 
             string action = item.index.action;
             string path = item.index.path;
+            item.index.runCounter++;
+
 
             // SPEEDLAUNCH_VIEW_DOITEM_ACTION_OPEN_IN_SYSTEM
             if ("open_in_system" == action) {
@@ -484,6 +488,8 @@ namespace SpeedLaunch
             }
         }
 
-        
+        public void moveItemToTop(ListItem item) { 
+
+        }        
     }
 }

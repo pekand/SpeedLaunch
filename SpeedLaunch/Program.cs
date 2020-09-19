@@ -8,14 +8,15 @@ namespace SpeedLaunch
 {
     static class Program
     {
-        public static SpeedLaunch speedLaunch = new SpeedLaunch();
-
         // IS_DEBUG_MODE
 #if DEBUG
         public static bool isDebugMode = true;
 #else
         public static bool isDebugMode = false;
 #endif
+
+
+        public static SpeedLaunch speedLaunch = new SpeedLaunch();
 
         /// <summary>
         /// The main entry point for the application.

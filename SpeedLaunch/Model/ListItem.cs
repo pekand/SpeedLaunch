@@ -16,6 +16,6 @@ namespace SpeedLaunch
         public int top = 0;
         public int width = 0;
         public int heighth = 0;
-        public bool selected = false;        
+        public bool selected = false;
     }
 }
