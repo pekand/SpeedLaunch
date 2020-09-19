@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpeedLaunch.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,9 @@ namespace SpeedLaunch
 {
     static class Program
     {
+        public static Log log = new Log();
+        public static Console console = new Console();
+
         // IS_DEBUG_MODE
 #if DEBUG
         public static bool isDebugMode = true;

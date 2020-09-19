@@ -490,6 +490,13 @@ namespace SpeedLaunch
 
         public void moveItemToTop(ListItem item) { 
 
-        }        
+        }
+
+        private void SpeedLaunchView_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F12) {
+                Program.console.Show();
+            }
+        }
     }
 }

@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -17,7 +19,9 @@ namespace SpeedLaunch
                 {
                     System.Diagnostics.Process.Start(path);
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
+                catch (Exception ex) {
+                    Program.log.write(ex.Message);
+                }
             }
             else if (Directory.Exists(path))  // OPEN DIRECTORY
             {
@@ -25,8 +29,23 @@ namespace SpeedLaunch
                 {
                     System.Diagnostics.Process.Start(path);
                 }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation); }
+                catch (Exception ex) {
+                    Program.log.write(ex.Message);
+                }
             }
+        }
+
+        [DllImport("shell32.dll")]
+        static extern IntPtr ExtractAssociatedIcon(IntPtr hInst, StringBuilder lpIconPath, out ushort lpiIcon);
+
+        public static Icon GetIconOldSchool(string fileName)
+        {
+            ushort uicon;
+            StringBuilder strB = new StringBuilder(fileName);
+            IntPtr handle = ExtractAssociatedIcon(IntPtr.Zero, strB, out uicon);
+            Icon ico = Icon.FromHandle(handle);
+
+            return ico;
         }
 
         public static Bitmap GetImage(string file)
@@ -38,7 +57,17 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Program.log.write(ex.Message);
+
+                try
+                {
+                    Icon ico2 = GetIconOldSchool(file);
+                    return ico2.ToBitmap();
+                }
+                catch (Exception ex2)
+                {
+                    Program.log.write(ex2.Message);
+                }
             }
 
             return null;

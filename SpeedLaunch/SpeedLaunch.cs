@@ -144,7 +144,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Program.log.write(ex.Message);
             }
         }
 
@@ -201,7 +201,7 @@ namespace SpeedLaunch
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            Program.log.write(ex.Message);
                         }
                     }
                     commands.Add(c);
@@ -373,7 +373,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Program.log.write(ex.Message);
             }
 
             return true;
@@ -421,7 +421,7 @@ namespace SpeedLaunch
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            Program.log.write(ex.Message);
                         }
                     }
                     cache.Add(c);
@@ -489,7 +489,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Program.log.write(ex.Message);
             }
 
 
@@ -502,11 +502,11 @@ namespace SpeedLaunch
             }
             catch (System.IO.IOException ex)
             {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Program.log.write(ex.Message);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Program.log.write(ex.Message);
             }
 
 
