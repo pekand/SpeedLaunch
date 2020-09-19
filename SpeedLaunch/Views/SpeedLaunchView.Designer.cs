@@ -61,6 +61,7 @@
             this.Shown += new System.EventHandler(this.SpeedLaunch_Shown);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SpeedLaunch_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SpeedLaunch_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SpeedLaunchView_KeyUp);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SpeedLaunch_MouseClick);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SpeedLaunch_MouseMove);
             this.Resize += new System.EventHandler(this.SpeedLaunch_Resize);

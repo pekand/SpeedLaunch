@@ -43,7 +43,7 @@ namespace SpeedLaunch
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                Program.log.write(ex.Message);
             }
         }
     }
