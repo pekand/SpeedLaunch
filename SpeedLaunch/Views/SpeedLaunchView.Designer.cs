@@ -28,6 +28,7 @@
         /// </summary>        
         private void InitializeComponent() // SPEEDLAUNCH_VIEW_INITIALIZECOMPONENT
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpeedLaunchView));
             this.inputBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -53,6 +54,7 @@
             this.ClientSize = new System.Drawing.Size(1008, 588);
             this.Controls.Add(this.inputBox);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SpeedLaunchView";
             this.Text = "SppedLaunch";
             this.Activated += new System.EventHandler(this.SpeedLaunch_Activated);
