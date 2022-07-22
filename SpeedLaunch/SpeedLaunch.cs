@@ -311,7 +311,7 @@ namespace SpeedLaunch
                     return;
                 }
 
-                ProcessDirectory(subdirectory, f, d, --level);
+                ProcessDirectory(subdirectory, f, d, level-1);
             }
         }
 
