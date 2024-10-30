@@ -13,7 +13,8 @@ namespace SpeedLaunch
         public string path = "";
         public string action = "";
         public long priority = 0;
-        public long runCounter = 0;
+        public long runCounter = 0;        
         public Bitmap image = null; // loaded image
+        public bool remove = false;
     }
 }

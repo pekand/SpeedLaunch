@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Windows.Input;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace SpeedLaunch
 {
@@ -24,7 +25,7 @@ namespace SpeedLaunch
 
         public static SpeedLaunchView view = null;
 
-        public bool indexIsRebuilded = false;
+        public bool indexIsRebuilding = false;
 
         private NotifyIcon trayIcon;
        
@@ -79,7 +80,7 @@ namespace SpeedLaunch
                 Directory.CreateDirectory(speedlaunchConfigDirectory);
             }
 
-            if (Program.isDebugMode)
+            if (Program.isDebugMode())
             {
                 this.configFileName = "config.debug.xml";
             }
@@ -212,9 +213,16 @@ namespace SpeedLaunch
         // BUILD_INDEX_FROM_COMMANDS
         public void buildIndex()
         {
-            cache.Clear();
+            if (this.indexIsRebuilding)
+            { 
+                return; 
+            }
 
-            this.indexIsRebuilded = true;
+            foreach (Index indexItem in cache) {
+                indexItem.remove = true;
+            }
+
+            this.indexIsRebuilding = true;
 
             //BUILD_INDEX_WORKER
             Job.doJob(
@@ -226,7 +234,7 @@ namespace SpeedLaunch
                             // COMMAND_SCAN_DIRECTORY_FOR_FILES
                             if (command.type == "scan_directory_for_files")
                             {
-                                List<string> extensions = command.extensions.Split(' ').ToList().ConvertAll(d => d.ToLower());
+                                List<string> includeExtensions = command.extensions.Split(' ').ToList().ConvertAll(d => "."+d.ToLower());
 
                                 string path = command.path;
 
@@ -237,33 +245,53 @@ namespace SpeedLaunch
 
                                 if (Directory.Exists(path))
                                 {
-                                    ProcessDirectory(
-                                        path,
-                                        (string filePath) => {
-                                            string extension = Path.GetExtension(filePath);
+                                    List<string> excludeNames = new List<string> { ".git", ".vs", ".gitignore" };
+                                    List<string> excludeExtensions = new List<string> { };
 
-                                            if (extensions.Contains(extension.ToLower().TrimStart('.')))
-                                            {
-                                                Index i = new Index();
-                                                i.text = Path.GetFileNameWithoutExtension(filePath);
-                                                i.path = filePath;
-                                                i.action = command.action;
-                                                i.priority = command.priority;
-                                                cache.Add(i);
+                                    List<string> files = Files.ProcessDirectory(
+                                        path, 
+                                        excludeNames, 
+                                        excludeExtensions, 
+                                        includeExtensions, 
+                                        false
+                                    );
+
+                                    foreach (string file in files)
+                                    {
+                                        bool alreadyExists = false;
+                                        foreach (Index indexItem in cache)
+                                        {
+                                            if (indexItem.path == file) {
+                                                indexItem.remove = false;
+                                                alreadyExists = true;
+                                                break;
                                             }
 
-                                            return false;
-                                        },
-                                        (string directoryPath) => {
-                                            return false;
                                         }
-                                    );
+
+                                        if (alreadyExists) {
+                                            continue;
+                                        }
+
+                                        Index i = new Index();
+                                        i.text = Path.GetFileNameWithoutExtension(file);
+                                        i.path = file;
+                                        i.action = command.action;
+                                        i.priority = command.priority;
+                                        i.remove = false;
+                                        cache.Add(i);
+                                    }
 
                                 }
                             }
                         }
 
+                        cache.RemoveAll(i => i.remove == true);
+
                         cache = cache.OrderBy(x => x.priority).ToList();
+
+                        this.indexIsRebuilding = false;
+
                     }
                 ),
              new RunWorkerCompletedEventHandler(
@@ -276,6 +304,33 @@ namespace SpeedLaunch
 
             
         }
+
+        // BUILD_IAMGE_CACHE
+        public void rebuildImageCache()
+        {
+
+            //BUILD_INDEX_WORKER
+            Job.doJob(
+                new DoWorkEventHandler(
+                    delegate (object o, DoWorkEventArgs args)
+                    {
+                        foreach (Index indexItem in cache)
+                        {
+                            indexItem.image = Tools.GetImage(indexItem.path);
+                        }
+                    }
+                ),
+             new RunWorkerCompletedEventHandler(
+                    delegate (object o, RunWorkerCompletedEventArgs args)
+                    {
+                        // complete
+                    }
+                )
+             );
+
+
+        }
+
 
         public delegate bool CallBack(string path);
 
@@ -311,7 +366,7 @@ namespace SpeedLaunch
                     return;
                 }
 
-                ProcessDirectory(subdirectory, f, d, level-1);
+                ProcessDirectory(subdirectory, f, d, --level);
             }
         }
 
@@ -332,7 +387,7 @@ namespace SpeedLaunch
                 Directory.CreateDirectory(speedlaunchIndexFileDirectory);
             }
 
-            if (Program.isDebugMode)
+            if (Program.isDebugMode())
             {
                 this.indexFileName = "index.debug.xml";
             }
@@ -445,7 +500,7 @@ namespace SpeedLaunch
                 Directory.CreateDirectory(speedlaunchIndexFileDirectory);
             }
 
-            if (Program.isDebugMode)
+            if (Program.isDebugMode())
             {
                 this.indexFileName = "index.debug.xml";
             }
@@ -549,9 +604,7 @@ namespace SpeedLaunch
             view = null;
             Hook.unregisterHook();
 
-            if (this.indexIsRebuilded) {
-                this.saveIndexFile();
-            }
+            this.saveIndexFile();
 
             Application.Exit();
         }

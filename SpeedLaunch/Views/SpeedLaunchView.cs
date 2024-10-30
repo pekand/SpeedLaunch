@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using NCalc;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using System.Linq;
+using System.IO;
+using System.Reflection;
 
 namespace SpeedLaunch
 {
@@ -133,7 +135,7 @@ namespace SpeedLaunch
                 if (item.left <= mx && mx <= item.left + item.width && item.top <= my && my <= item.top + item.heighth)
                 {
                     selectItem(item);
-                    doItem(item);
+                    doItem(item, inputBox.Text.Trim());
                     Invalidate();
                     return;
                 }
@@ -148,8 +150,16 @@ namespace SpeedLaunch
                 items.Clear();
                 context.loadConfigurationFile();
                 context.buildIndex();
+                context.saveIndexFile();
+                string search = inputBox.Text.Trim().ToLower();
+                filterItems(search);
             }
-        }
+
+            if (e.KeyCode == Keys.F9)
+            {
+                context.rebuildImageCache();
+            }
+        } 
         
         // SPEEDLAUNCH_VIEW_FORMCLOSING
         private void SpeedLaunchView_FormClosing(object sender, FormClosingEventArgs e)
@@ -208,7 +218,7 @@ namespace SpeedLaunch
                 else {
                     ListItem item = getSelectedItem();
                     if (item != null) {
-                        doItem(item);
+                        doItem(item, inputBox.Text.Trim());
                     }
                 }
 
@@ -261,33 +271,13 @@ namespace SpeedLaunch
                 items.Add(item);
             }
 
-            Regex calcMatchExpression = new Regex(@"^=(.*)$", RegexOptions.IgnoreCase);
-            
-            Match matchExpression = calcMatchExpression.Match(search);
-
-            if (matchExpression.Success) { // check if command start with = -> calc comand            
-
-                string result = "";
-                string exp = matchExpression.Groups[1].Captures[0].Value;
-                try
-                {
-                    if (exp.Trim() != "") { 
-                        Expression e = new Expression(exp);
-                        result = e.Evaluate().ToString();
-                    }
+            foreach (var plagin in Program.plugins) {
+                ListItem item =  plagin.FilterAction(search);
+                if (item != null) {
+                    items.Add(item);
                 }
-                catch (Exception ex)
-                {
-                    result = ex.Message;
-                }
-
-                ListItem item = new ListItem();
-                item.text = result;
-                item.description = "ncalc";
-                item.index = null;
-                items.Add(item);
             }
-
+            
             if (search == "now" || search == "time" || search == "today") // check if it time command
             {
 
@@ -296,10 +286,10 @@ namespace SpeedLaunch
                 item.text = now.ToString("yyyy-MM-dd HH:mm:ss, dddd");
                 item.description = "date and time";
                 item.index = null;
+                item.action = "TIME";
                 items.Add(item);
             }
 
-            int itemCount = 30;
             foreach (Index index in context.cache) // filter items from cache
             {
                 if (index.text.ToLower().Contains(search))
@@ -308,10 +298,12 @@ namespace SpeedLaunch
                     ListItem item = new ListItem();
                     item.text = index.text;
                     item.description = index.path;
+                    item.path = index.path;
                     item.index = index;
-                    if (index.image == null) {
-                        
-                        Job.doJob(
+                    item.runCounter = index.runCounter;
+                    if (index.image == null && File.Exists(item.path)) {
+                        index.image = Tools.GetImage(index.path);
+                        /*Job.doJob(
                             new DoWorkEventHandler(
                                 delegate (object o, DoWorkEventArgs args)
                                 {
@@ -324,21 +316,22 @@ namespace SpeedLaunch
                                     this.Invalidate();
                                 }
                             )
-                         );
+                         );*/
                     }
                     items.Add(item);
-
-                    itemCount--;
-                }
-
-                if (itemCount == 0)
-                {
-                    break;
                 }
             }
 
-            if (items.Count > 0)
+            foreach (Plugin plugin in Program.plugins)
             {
+                plugin.AddItem(items, search);
+            }
+
+            if (items.Count > 0)
+            {                
+                items = items.OrderByDescending(x => x.runCounter).ToList();
+                items = items.Take(30).ToList();                
+
                 selectItem(items[0]);
                 setItemPositions();
             }
@@ -461,30 +454,39 @@ namespace SpeedLaunch
         }
 
         // SPEEDLAUNCH_VIEW_DOITEM
-        public void doItem(ListItem item)
+        public void doItem(ListItem item, string search)
         {
-            if (item.index == null) {
-                return;
-            }
-
-            string action = item.index.action;
-            string path = item.index.path;
-            item.index.runCounter++;
-
-
-            // SPEEDLAUNCH_VIEW_DOITEM_ACTION_OPEN_IN_SYSTEM
-            if ("open_in_system" == action) {
-                this.Hide();
-                Tools.OpenPathInSystem(path);
-                inputBox.Text = "";
-            }
-
-            // SPEEDLAUNCH_VIEW_DOITEM_ACTION_RUN_SYSTEM_COMMAND
-            if ("run_system_command" == action)
+            if (item.index == null)
             {
-                this.Hide();
-                Tools.RunCommandAndExit(path);
-                inputBox.Text = "";
+                foreach (Plugin plugin in Program.plugins)
+                {
+                    plugin.doItem(item, search);
+                }
+                
+            }
+            else
+            {
+
+                string action = item.index.action;
+                string path = item.index.path;
+                item.index.runCounter++;
+
+
+                // SPEEDLAUNCH_VIEW_DOITEM_ACTION_OPEN_IN_SYSTEM
+                if ("open_in_system" == action)
+                {
+                    this.Hide();
+                    Tools.OpenPathInSystem(path);
+                    inputBox.Text = "";
+                }
+
+                // SPEEDLAUNCH_VIEW_DOITEM_ACTION_RUN_SYSTEM_COMMAND
+                if ("run_system_command" == action)
+                {
+                    this.Hide();
+                    Tools.RunCommandAndExit(path);
+                    inputBox.Text = "";
+                }
             }
         }
 
@@ -495,8 +497,13 @@ namespace SpeedLaunch
         private void SpeedLaunchView_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F12) {
-                Program.console.Show();
+               
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 }

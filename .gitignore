@@ -4,3 +4,7 @@
 /Output
 /packages
 /Build/*
+/plugins/CalcPlugin/bin
+/plugins/CalcPlugin/obj
+/plugins/DiagramPlugin/bin
+/plugins/DiagramPlugin/obj

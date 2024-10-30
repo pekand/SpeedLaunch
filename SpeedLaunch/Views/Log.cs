@@ -6,17 +6,17 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpeedLaunch.Views
+namespace SpeedLaunch
 {
-    class Log
+    public class Log
     {
-        public string text = "";
-        public void write(string message) {
+
+ 		 public string text = "";
+         public void write(string message) {
 #if DEBUG
-            File.AppendAllText(@"app.log", message+"\n");
+            File.AppendAllText(@"app.log", message+"\n");            
 #endif
             text = text + message + "\r\n";
-            Program.console.UpdateText(text);
         }
     }
 }

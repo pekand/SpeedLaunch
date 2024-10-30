@@ -63,14 +63,15 @@ namespace SpeedLaunch
                 if (keyPressed.ToString() == "LeftAlt")
                 {
                     LeftAlt = true;
-                }
-
-                if (LeftAlt && keyPressed.ToString() == "Space")
+                } else if (LeftAlt && keyPressed.ToString() == "Space")
                 {
                     if (altSpacePressed != null)
                     {
                         altSpacePressed();
                     }
+                }
+                else {
+                    LeftAlt = false;
                 }
 
             }

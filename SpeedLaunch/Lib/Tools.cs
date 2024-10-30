@@ -15,13 +15,51 @@ namespace SpeedLaunch
         {
             if (File.Exists(path))       // OPEN FILE
             {
+                string workDir = Path.GetDirectoryName(path);
+                string arguments = "";
+
+                if (Link.isLink(path)) {
+                    Link link = Link.extractLink(path);
+                    path = link.path;
+                    workDir = link.workdir;
+                    arguments = link.arguments;
+                }
+
+                bool executionFail = false;
                 try
                 {
-                    System.Diagnostics.Process.Start(path);
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.WorkingDirectory = workDir;
+                    startInfo.FileName = path;  
+                    startInfo.Arguments = arguments;
+                    Process process = Process.Start(startInfo);                    
                 }
                 catch (Exception ex) {
                     Program.log.write(ex.Message);
+                    executionFail = true;
+                        
                 }
+
+                if (executionFail)
+                {
+                    try
+                    {
+                        Process process = new Process();
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = "/C start \"" + path + "\" " + arguments;
+                        process.StartInfo.WorkingDirectory = workDir;
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.CreateNoWindow = true;          
+                        process.Start();
+                    }
+                    catch (Exception ex)
+                    {
+                        Program.log.write(ex.Message);
+                        MessageBox.Show(ex.Message);
+
+                    }
+                }
+
             }
             else if (Directory.Exists(path))  // OPEN DIRECTORY
             {
