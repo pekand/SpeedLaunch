@@ -14,7 +14,7 @@ namespace SpeedLaunch
         ListItem FilterAction(string search);
 
         void AddItem(List<ListItem> items, string search);
-        void doItem(ListItem item, string search);
+        bool doItem(ListItem item, string search);
 
 
     }

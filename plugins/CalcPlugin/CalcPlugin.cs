@@ -61,7 +61,8 @@ namespace SpeedLaunch
         { 
         }
 
-        public void doItem(ListItem item, string search) { 
+        public bool doItem(ListItem item, string search) {
+            return false;
         }
     }
 }

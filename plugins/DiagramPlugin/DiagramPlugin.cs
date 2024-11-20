@@ -39,14 +39,16 @@ namespace SpeedLaunch
             }
         }
 
-        public void doItem(ListItem item, string search)
+        public bool doItem(ListItem item, string search)
         {
             if (item.action == "CREATE_DIAGRAM")
             {
                 string diagramName = search;
                 Diagram.CreateDiagram(diagramName);
-                return;
+                return true;
             }
+
+            return false;
         }
     }
 }

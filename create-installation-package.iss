@@ -39,8 +39,12 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "SpeedLaunch\bin\x64\Release\SpeedLaunch.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "SpeedLaunch\bin\x64\Release\NCalc.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "SpeedLaunch\bin\x64\Release\SpeedLaunch.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "SpeedLaunch.ico"; DestDir: "{app}"; Flags: ignoreversion
+
+Source: "SpeedLaunch\bin\x64\Release\plugins\CalcPlugin\CalcPlugin.dll"; DestDir: "{app}\plugins\CalcPlugin\"; Flags: ignoreversion
+Source: "SpeedLaunch\bin\x64\Release\plugins\CalcPlugin\NCalc.dll"; DestDir: "{app}\plugins\CalcPlugin\"; Flags: ignoreversion
+Source: "SpeedLaunch\bin\x64\Release\plugins\DiagramPlugin\DiagramPlugin.dll"; DestDir: "{app}\plugins\DiagramPlugin\"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

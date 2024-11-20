@@ -460,7 +460,12 @@ namespace SpeedLaunch
             {
                 foreach (Plugin plugin in Program.plugins)
                 {
-                    plugin.doItem(item, search);
+                    bool executed = plugin.doItem(item, search);
+
+                    if (executed) {
+                        this.Hide();
+                        break;
+                    }
                 }
                 
             }
