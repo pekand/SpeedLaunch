@@ -229,6 +229,8 @@ namespace SpeedLaunch
                 new DoWorkEventHandler(
                     delegate (object o, DoWorkEventArgs args)
                     {
+                        List<Index> newCache = new List<Index>();
+
                         foreach (Command command in commands)
                         {
                             // COMMAND_SCAN_DIRECTORY_FOR_FILES
@@ -259,7 +261,7 @@ namespace SpeedLaunch
                                     foreach (string file in files)
                                     {
                                         bool alreadyExists = false;
-                                        foreach (Index indexItem in cache)
+                                        foreach (Index indexItem in newCache)
                                         {
                                             if (indexItem.path == file) {
                                                 indexItem.remove = false;
@@ -279,16 +281,73 @@ namespace SpeedLaunch
                                         i.action = command.action;
                                         i.priority = command.priority;
                                         i.remove = false;
-                                        cache.Add(i);
+                                        newCache.Add(i);
                                     }
 
                                 }
                             }
+
+                            // COMMAND_SCAN_DIRECTORY_FOR_FILES
+                            if (command.type == "scan_directory_for_directories")
+                            {
+                               string path = command.path;
+
+                                // COMMAND_SCAN_DIRECTORY_FOR_FILES_PATH_VARIABLES
+                                path = path.Replace("%USER_PROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+                                path = path.Replace("%COMMON_START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu));
+                                path = path.Replace("%START_MENU%", Environment.GetFolderPath(Environment.SpecialFolder.StartMenu));
+
+                                if (Directory.Exists(path))
+                                {
+                                    var ignoreDirs = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                                    {
+                                        ".git",
+                                        "bin",
+                                        "obj"
+                                    };
+
+                                    List<string> files = Files.GetDirectories(
+                                        path,
+                                        ignoreDirs
+                                    );
+
+                                    foreach (string file in files)
+                                    {
+                                        bool alreadyExists = false;
+                                        foreach (Index indexItem in newCache)
+                                        {
+                                            if (indexItem.path == file)
+                                            {
+                                                indexItem.remove = false;
+                                                alreadyExists = true;
+                                                break;
+                                            }
+
+                                        }
+
+                                        if (alreadyExists)
+                                        {
+                                            continue;
+                                        }
+
+                                        Index i = new Index();
+                                        i.text = Path.GetFileNameWithoutExtension(file);
+                                        i.path = file;
+                                        i.action = command.action;
+                                        i.priority = command.priority;
+                                        i.remove = false;
+                                        newCache.Add(i);
+                                    }
+                                }
+                            }
                         }
 
-                        cache.RemoveAll(i => i.remove == true);
 
-                        cache = cache.OrderBy(x => x.priority).ToList();
+
+                        newCache.RemoveAll(i => i.remove == true);
+
+                        cache.Clear();
+                        cache = newCache.OrderBy(x => x.priority).ToList();
 
                         this.indexIsRebuilding = false;
 

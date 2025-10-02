@@ -65,5 +65,31 @@ namespace SpeedLaunch
 
             return output;
         }
+
+        public static List<string> GetDirectories(string path, HashSet<string> ignoreDirs)
+        {
+            var result = new List<string>();
+            GetDirectoriesRecurse(path, ignoreDirs, result);
+            return result;
+        }
+
+        static void GetDirectoriesRecurse(string current, HashSet<string> ignoreDirs, List<string> result)
+        {
+            result.Add(current);
+
+            try
+            {
+                foreach (var dir in Directory.GetDirectories(current))
+                {
+                    string dirName = Path.GetFileName(dir);
+                    if (ignoreDirs.Contains(dirName))
+                        continue;
+
+                    GetDirectoriesRecurse(dir, ignoreDirs, result);
+                }
+            }
+            catch (UnauthorizedAccessException) { }
+            catch (PathTooLongException) { }
+        }
     }
 }

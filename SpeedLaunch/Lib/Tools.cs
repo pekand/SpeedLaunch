@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -6,11 +7,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SpeedLaunch
 {
     public class Tools
     {
+        public static Dictionary<string, Bitmap> icon = new Dictionary<string, Bitmap>();
+    
         public static void OpenPathInSystem(string path)
         {
             if (File.Exists(path))       // OPEN FILE
@@ -86,12 +90,35 @@ namespace SpeedLaunch
             return ico;
         }
 
-        public static Bitmap GetImage(string file)
+        
+        public static Bitmap GetImage(string path)
         {
+            string typeofpath = "unknown";
+
+            if (Directory.Exists(path))
+            {
+                typeofpath = "directory";
+            }
+            else if (File.Exists(path))
+            {
+                typeofpath = Path.GetExtension(path);
+            }
+
+            if (Tools.icon.ContainsKey(typeofpath))
+            {   
+                return Tools.icon[typeofpath];
+            }
+
             try
             {
-                Icon ico = Icon.ExtractAssociatedIcon(file);
-                return ico.ToBitmap();
+                Icon ico = Icon.ExtractAssociatedIcon(path);
+                if (ico != null && !ico.Equals(null))
+                {
+                    Bitmap image = ico.ToBitmap();                
+                    Tools.icon[typeofpath] = image;
+                    return image;
+                }
+                
             }
             catch (Exception ex)
             {
@@ -99,8 +126,15 @@ namespace SpeedLaunch
 
                 try
                 {
-                    Icon ico2 = GetIconOldSchool(file);
-                    return ico2.ToBitmap();
+                    Icon ico2 = GetIconOldSchool(path);
+                    if (ico2 != null && !ico2.Equals(null))
+                    {
+                        Bitmap image = ico2.ToBitmap();
+                    
+                        Tools.icon[typeofpath] = image;
+                        return image;
+                    }
+                    
                 }
                 catch (Exception ex2)
                 {

@@ -226,15 +226,19 @@ namespace SpeedLaunch
 
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-            }
+            }                
 
             if (e.KeyCode == Keys.Down)
             {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
                 selectNextItem();
             }
 
             if (e.KeyCode == Keys.Up)
             {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
                 selectPrevItem();
             }
 
@@ -246,6 +250,24 @@ namespace SpeedLaunch
             string search = inputBox.Text.Trim().ToLower();
             filterItems(search);
         }
+
+        static bool SimpleMatch(string customPattern, string input)
+        {
+            string[] parts = customPattern.Split('~');
+            int currentIndex = 0;
+
+            foreach (var part in parts)
+            {
+                int foundIndex = input.IndexOf(part, currentIndex, StringComparison.OrdinalIgnoreCase);
+                if (foundIndex == -1)
+                    return false;
+
+                currentIndex = foundIndex + part.Length;
+            }
+
+            return true;
+        }
+
 
         // INPUT_BOX_FILTERITEMS
         public void filterItems(string search)
@@ -290,37 +312,51 @@ namespace SpeedLaunch
                 items.Add(item);
             }
 
-            foreach (Index index in context.cache) // filter items from cache
+            try
             {
-                if (index.text.ToLower().Contains(search))
-                {
 
-                    ListItem item = new ListItem();
-                    item.text = index.text;
-                    item.description = index.path;
-                    item.path = index.path;
-                    item.index = index;
-                    item.runCounter = index.runCounter;
-                    if (index.image == null && File.Exists(item.path)) {
-                        index.image = Tools.GetImage(index.path);
-                        /*Job.doJob(
-                            new DoWorkEventHandler(
-                                delegate (object o, DoWorkEventArgs args)
-                                {
-                                    index.image = Tools.GetImage(index.path);
-                                }
-                            ),
-                            new RunWorkerCompletedEventHandler(
-                                delegate (object o, RunWorkerCompletedEventArgs args)
-                                {
-                                    this.Invalidate();
-                                }
-                            )
-                         );*/
+                foreach (Index index in context.cache) // filter items from cache
+                {
+                    if (SimpleMatch(search, index.text))
+                    {
+
+                        ListItem item = new ListItem();
+                        item.text = index.text;
+                        item.description = index.path;
+                        item.path = index.path;
+                        item.index = index;
+                        item.runCounter = index.runCounter;
+                        items.Add(item);
                     }
-                    items.Add(item);
+                }
+
+                foreach (var item in items.Take(25))
+                {
+                    if (item.index.image == null && File.Exists(item.index.path))
+                    {
+                        Job.doJob(
+                        new DoWorkEventHandler(
+                            delegate (object o, DoWorkEventArgs args)
+                            {
+                                item.index.image = Tools.GetImage(item.index.path);
+                            }
+                        ),
+                        new RunWorkerCompletedEventHandler(
+                            delegate (object o, RunWorkerCompletedEventArgs args)
+                            {
+                                this.Invalidate();
+                            }
+                        )
+                        );
+                    }
                 }
             }
+            catch (Exception)
+            {
+
+            }
+
+            
 
             foreach (Plugin plugin in Program.plugins)
             {
