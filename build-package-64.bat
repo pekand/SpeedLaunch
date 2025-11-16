@@ -10,7 +10,7 @@ call subscribe "Build\NCalc.dll"
 call subscribe "Build\SpeedLaunch.exe"
 
 
-iscc /q create-installation-package.iss
+iscc /q SpeedLaunch.iss
 
 call subscribe "Output\SpeedLaunch-1.0.0.0.exe"
 
